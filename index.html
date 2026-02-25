@@ -561,22 +561,27 @@ async function loadData() {
   renderPedidos();
 }
 
+async function saveTable(table, data) {
+  const url = `${SCRIPT_URL}?action=set&table=${table}&data=${encodeURIComponent(JSON.stringify(data))}`;
+  const r = await fetch(url);
+  const json = await r.json();
+  if (!json.ok) throw new Error(json.error);
+}
+
 async function save() {
   showLoader('💾 Guardando...');
-  const mesasData  = [['id','status','valor'],       ...mesas.map(m=>[m.id, m.status, m.valor])];
-  const ventasData = [['id','mesa','valor','fecha','tipo'], ...ventas.map(v=>[v.id, v.mesa, v.valor, v.fecha, v.tipo])];
-  const pedidosData= [['id','cliente','comanda','valor','pagado','fecha'], ...pedidos.map(p=>[p.id, p.cliente, p.comanda, p.valor, p.pagado, p.fecha])];
+  const mesasData   = [['id','status','valor'],                    ...mesas.map(m=>[m.id, m.status, m.valor])];
+  const ventasData  = [['id','mesa','valor','fecha','tipo'],        ...ventas.map(v=>[v.id, v.mesa, v.valor, v.fecha, v.tipo])];
+  const pedidosData = [['id','cliente','comanda','valor','pagado','fecha'], ...pedidos.map(p=>[p.id, p.cliente, p.comanda, p.valor, p.pagado, p.fecha])];
 
   try {
-    await Promise.all([
-      fetch(`${SCRIPT_URL}?action=set&table=mesas`,   { method:'POST', body: JSON.stringify({data: mesasData}),   headers:{'Content-Type':'application/json'} }),
-      fetch(`${SCRIPT_URL}?action=set&table=ventas`,  { method:'POST', body: JSON.stringify({data: ventasData}),  headers:{'Content-Type':'application/json'} }),
-      fetch(`${SCRIPT_URL}?action=set&table=pedidos`, { method:'POST', body: JSON.stringify({data: pedidosData}), headers:{'Content-Type':'application/json'} }),
-    ]);
+    await saveTable('mesas',   mesasData);
+    await saveTable('ventas',  ventasData);
+    await saveTable('pedidos', pedidosData);
     hideLoader();
   } catch(e) {
-    showLoader('❌ Error al guardar');
-    setTimeout(hideLoader, 3000);
+    showLoader('❌ Error al guardar: ' + e.message);
+    setTimeout(hideLoader, 4000);
     console.error(e);
   }
 }
