@@ -504,31 +504,81 @@ let pedidos = [];
 let currentMesa = null;
 let currentFilter = 'hoy';
 let editingPedidoId = null;
-let storageReady = false;
 
-// ========== PERSISTENT STORAGE ==========
+// ========== GOOGLE SHEETS BACKEND ==========
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyzKYNMRmKon2NPRdwka7DAottxKaDVVJMmXq8l3EJm4WDfPZmqJgDW3b53iBXazyIPA/exec';
+
+function showLoader(msg) {
+  let el = document.getElementById('db-loader');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'db-loader';
+    el.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--accent3);color:#d8f3dc;padding:10px 18px;border-radius:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:opacity 0.3s;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+}
+function hideLoader() {
+  const el = document.getElementById('db-loader');
+  if (el) el.style.opacity = '0';
+}
+
 async function loadData() {
+  showLoader('⏳ Cargando datos...');
   try {
-    const r1 = await window.storage.get('pacomer-mesas');
-    if (r1 && r1.value) mesas = JSON.parse(r1.value);
-  } catch(e) { /* no data yet */ }
-  try {
-    const r2 = await window.storage.get('pacomer-ventas');
-    if (r2 && r2.value) ventas = JSON.parse(r2.value);
-  } catch(e) {}
-  try {
-    const r3 = await window.storage.get('pacomer-pedidos');
-    if (r3 && r3.value) pedidos = JSON.parse(r3.value);
-  } catch(e) {}
-  storageReady = true;
+    const [r1, r2, r3] = await Promise.all([
+      fetch(`${SCRIPT_URL}?action=get&table=mesas`).then(r=>r.json()),
+      fetch(`${SCRIPT_URL}?action=get&table=ventas`).then(r=>r.json()),
+      fetch(`${SCRIPT_URL}?action=get&table=pedidos`).then(r=>r.json()),
+    ]);
+
+    if (r1.data && r1.data.length > 1)
+      mesas = r1.data.slice(1).map(row => ({
+        id: Number(row[0]), status: row[1] || 'libre', valor: Number(row[2]) || 0
+      }));
+
+    if (r2.data && r2.data.length > 1)
+      ventas = r2.data.slice(1).map(row => ({
+        id: row[0], mesa: row[1], valor: Number(row[2]) || 0, fecha: row[3], tipo: row[4]
+      }));
+
+    if (r3.data && r3.data.length > 1)
+      pedidos = r3.data.slice(1).map(row => ({
+        id: row[0], cliente: row[1], comanda: row[2],
+        valor: Number(row[3]) || 0,
+        pagado: row[4] === true || row[4] === 'TRUE' || row[4] === 'true',
+        fecha: row[5]
+      }));
+
+    hideLoader();
+  } catch(e) {
+    showLoader('❌ Error al conectar con la base de datos');
+    setTimeout(hideLoader, 3000);
+    console.error(e);
+  }
   renderMesas();
   renderPedidos();
 }
 
 async function save() {
-  try { await window.storage.set('pacomer-mesas', JSON.stringify(mesas)); } catch(e) {}
-  try { await window.storage.set('pacomer-ventas', JSON.stringify(ventas)); } catch(e) {}
-  try { await window.storage.set('pacomer-pedidos', JSON.stringify(pedidos)); } catch(e) {}
+  showLoader('💾 Guardando...');
+  const mesasData  = [['id','status','valor'],       ...mesas.map(m=>[m.id, m.status, m.valor])];
+  const ventasData = [['id','mesa','valor','fecha','tipo'], ...ventas.map(v=>[v.id, v.mesa, v.valor, v.fecha, v.tipo])];
+  const pedidosData= [['id','cliente','comanda','valor','pagado','fecha'], ...pedidos.map(p=>[p.id, p.cliente, p.comanda, p.valor, p.pagado, p.fecha])];
+
+  try {
+    await Promise.all([
+      fetch(`${SCRIPT_URL}?action=set&table=mesas`,   { method:'POST', body: JSON.stringify({data: mesasData}),   headers:{'Content-Type':'application/json'} }),
+      fetch(`${SCRIPT_URL}?action=set&table=ventas`,  { method:'POST', body: JSON.stringify({data: ventasData}),  headers:{'Content-Type':'application/json'} }),
+      fetch(`${SCRIPT_URL}?action=set&table=pedidos`, { method:'POST', body: JSON.stringify({data: pedidosData}), headers:{'Content-Type':'application/json'} }),
+    ]);
+    hideLoader();
+  } catch(e) {
+    showLoader('❌ Error al guardar');
+    setTimeout(hideLoader, 3000);
+    console.error(e);
+  }
 }
 
 // ========== FORMATTERS ==========
