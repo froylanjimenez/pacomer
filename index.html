@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pa Comer — POS</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg2: #ede6d6;
+    --bg3: #e2d9c6;
+    --card: #ffffff;
+    --card2: #faf7f2;
+    --accent: #2d6a4f;
+    --accent2: #40916c;
+    --accent3: #1b4332;
+    --green: #40916c;
+    --green2: #2d6a4f;
+    --red: #c0392b;
+    --text: #1a2e1e;
+    --text2: #4a6355;
+    --text3: #8aab96;
+    --border: #c8d8cc;
+    --shadow: 0 4px 24px rgba(45,106,79,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--accent3);
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: #d8f3dc;
+    letter-spacing: 0.5px;
+  }
+  .nav-logo span { color: var(--text3); font-size: 13px; font-family: 'IBM Plex Mono', monospace; margin-left: 8px; font-style: normal; }
+  .nav-tabs { display: flex; gap: 4px; }
+  .tab-btn {
+    padding: 8px 18px;
+    border: none;
+    background: transparent;
+    color: #95c4a8;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.1); color: #d8f3dc; }
+  .tab-btn.active { background: var(--accent2); color: #fff; font-weight: 600; }
+
+  /* MAIN */
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    flex: 1;
+    min-width: 160px;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
+  .stat-value { font-size: 24px; font-weight: 700; color: var(--accent); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
+  .stat-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* MESAS GRID */
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--bg3);
+    color: var(--text2);
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .mesas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .mesa-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .mesa-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+  .mesa-card:hover { border-color: var(--accent3); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .mesa-card.ocupada { border-color: var(--accent3); }
+  .mesa-card.ocupada::before { background: var(--accent); }
+  .mesa-card.pagada { border-color: var(--green2); opacity: 0.7; }
+  .mesa-card.pagada::before { background: var(--green); }
+
+  .mesa-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    color: var(--text);
+    font-weight: 900;
+  }
+  .mesa-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
+  .mesa-valor {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .mesa-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    margin-top: 6px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .mesa-status.libre { background: rgba(138,171,150,0.2); color: var(--text3); }
+  .mesa-status.ocupada { background: rgba(45,106,79,0.15); color: var(--accent); }
+  .mesa-status.pagada { background: rgba(64,145,108,0.15); color: var(--green); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 60px rgba(45,106,79,0.15);
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .modal-subtitle { color: var(--text2); font-size: 13px; margin-top: -14px; margin-bottom: 20px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--accent2); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-success { background: var(--green); color: white; }
+  .btn-success:hover { background: var(--green2); }
+  .btn-danger { background: var(--red); color: white; }
+  .btn-danger:hover { filter: brightness(1.1); }
+  .btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--text3); }
+
+  /* REGISTRO */
+  .registro-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: gap; gap: 12px; }
+  .export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-export {
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 10px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-export:hover { border-color: var(--accent2); color: var(--accent); }
+  .btn-export-danger { color: var(--red) !important; border-color: rgba(192,57,43,0.3) !important; }
+  .btn-export-danger:hover { border-color: var(--red) !important; background: rgba(192,57,43,0.08) !important; color: var(--red) !important; }
+  .btn-export .icon { font-size: 14px; }
+
+  .registro-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .registro-table table { width: 100%; border-collapse: collapse; }
+  .registro-table th {
+    background: var(--bg3);
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+  }
+  .registro-table td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid rgba(74,56,32,0.4); }
+  .registro-table tr:last-child td { border-bottom: none; }
+  .registro-table tr:hover td { background: var(--bg3); }
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .pill.pagado { background: rgba(76,175,130,0.2); color: var(--green); }
+  .pill.pendiente { background: rgba(232,160,48,0.15); color: var(--accent); }
+  .empty-state { text-align: center; padding: 48px; color: var(--text3); font-size: 14px; }
+  .empty-state .big { font-size: 40px; margin-bottom: 12px; }
+
+  /* PEDIDOS PENDIENTES */
+  .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .pedido-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    transition: all 0.2s;
+  }
+  .pedido-card.cancelado { border-color: var(--green2); opacity: 0.6; }
+  .pedido-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+  .pedido-cliente { font-weight: 600; font-size: 16px; color: var(--text); }
+  .pedido-fecha { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
+  .pedido-comanda { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; background: var(--bg3); padding: 10px 12px; border-radius: 8px; }
+  .pedido-footer { display: flex; align-items: center; justify-content: space-between; }
+  .pedido-valor { font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--accent2); font-weight: 600; }
+  .pedido-actions { display: flex; gap: 6px; }
+  .pedido-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .btn-pagar-p { background: var(--green); color: white; }
+  .btn-pagar-p:hover { filter: brightness(1.1); }
+  .btn-eliminar-p { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+  .btn-eliminar-p:hover { color: var(--red); border-color: var(--red); }
+  .add-pedido-btn {
+    background: var(--card);
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text3);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .add-pedido-btn:hover { border-color: var(--accent3); color: var(--accent); }
+  .add-pedido-btn .plus { font-size: 28px; display: block; margin-bottom: 6px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Date filter */
+  .date-filter { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .date-filter input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    outline: none;
+  }
+  .date-filter input:focus { border-color: var(--accent2); }
+  .date-filter label { font-size: 12px; color: var(--text2); }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7) sepia(1) hue-rotate(5deg); }
+
+  .filter-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .filter-tab {
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 8px;
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .filter-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Pa Comer <span>POS v1.0</span></div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showSection('mesas')">🪑 Mesas</button>
+    <button class="tab-btn" onclick="showSection('pedidos')">📋 Pedidos</button>
+    <button class="tab-btn" onclick="showSection('registro')">📊 Registro</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- SECTION MESAS -->
+  <div class="section active" id="sec-mesas">
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="section-title">Mesas <span class="badge" id="mesas-badge">20 mesas</span></div>
+    <div class="mesas-grid" id="mesas-grid"></div>
+  </div>
+
+  <!-- SECTION PEDIDOS PENDIENTES -->
+  <div class="section" id="sec-pedidos">
+    <div class="section-title">Pedidos Pendientes</div>
+    <div class="pedidos-grid" id="pedidos-grid">
+      <div class="add-pedido-btn" onclick="openPedidoModal()">
+        <span class="plus">＋</span>
+        Nuevo pedido pendiente
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION REGISTRO -->
+  <div class="section" id="sec-registro">
+    <div class="registro-header">
+      <div>
+        <div class="section-title" style="margin-bottom:8px">Registro de Ventas</div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="setFilter('hoy',this)">Hoy</button>
+          <button class="filter-tab" onclick="setFilter('semana',this)">Esta semana</button>
+          <button class="filter-tab" onclick="setFilter('mes',this)">Este mes</button>
+          <button class="filter-tab" onclick="setFilter('todo',this)">Todo</button>
+        </div>
+      </div>
+      <div class="export-btns">
+        <button class="btn-export" id="btn-toggle-saldos" onclick="toggleSaldos()"><span class="icon">👁</span> Ocultar saldos</button>
+        <button class="btn-export" onclick="exportCSV('hoy')"><span class="icon">📥</span> CSV Hoy</button>
+        <button class="btn-export" onclick="exportCSV('semana')"><span class="icon">📥</span> CSV Semana</button>
+        <button class="btn-export" onclick="exportCSV('mes')"><span class="icon">📥</span> CSV Mes</button>
+        <button class="btn-export btn-export-danger" onclick="openBorrarModal()"><span class="icon">🗑</span> Borrar registros</button>
+      </div>
+    </div>
+    <div class="registro-table" id="registro-table"></div>
+  </div>
+
+</main>
+
+<!-- MODAL MESA -->
+<div class="modal-overlay" id="modal-mesa">
+  <div class="modal">
+    <div class="modal-title" id="modal-mesa-title">Mesa #</div>
+    <div class="modal-subtitle" id="modal-mesa-sub"></div>
+    <div class="form-group">
+      <label>Valor (COP $)</label>
+      <input type="number" id="mesa-valor-input" placeholder="0" min="0">
+    </div>
+    <div class="modal-actions" id="modal-mesa-actions"></div>
+  </div>
+</div>
+
+<!-- MODAL PEDIDO -->
+<div class="modal-overlay" id="modal-pedido">
+  <div class="modal">
+    <div class="modal-title" id="modal-pedido-title">Pedido pendiente</div>
+    <div class="form-group">
+      <label>Nombre del cliente</label>
+      <input type="text" id="pedido-cliente-input" placeholder="Ej: Juan García">
+    </div>
+    <div class="form-group">
+      <label>Comanda / Descripción del pedido</label>
+      <textarea id="pedido-comanda-input" placeholder="Ej: 2 almuerzos del día, 1 jugos natural de mango..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Valor Total (COP $)</label>
+      <input type="number" id="pedido-valor-input" placeholder="0" min="0">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pedido')">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePedido()">Guardar pedido</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BORRAR REGISTROS -->
+<div class="modal-overlay" id="modal-borrar">
+  <div class="modal">
+    <div class="modal-title" style="color:var(--red)">⚠ Borrar todos los registros</div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px;line-height:1.6">Esta acción eliminará <strong style="color:var(--text)">permanentemente</strong> todo el historial de ventas. Las mesas y pedidos no se verán afectados.<br><br>Para confirmar, escribe la palabra <strong style="color:var(--red);font-family:'IBM Plex Mono',monospace">BORRAR</strong> a continuación:</p>
+    <div class="form-group">
+      <input type="text" id="borrar-confirm-input" placeholder="Escribe BORRAR para confirmar" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-borrar')">Cancelar</button>
+      <button class="btn btn-danger" onclick="confirmarBorrar()">Eliminar todo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== STATE ==========
+let mesas = Array.from({length:20},(_,i)=>({id:i+1,status:'libre',valor:0}));
+let ventas = [];
+let pedidos = [];
+let currentMesa = null;
+let currentFilter = 'hoy';
+let editingPedidoId = null;
+let storageReady = false;
+
+// ========== PERSISTENT STORAGE ==========
+async function loadData() {
+  try {
+    const r1 = await window.storage.get('pacomer-mesas');
+    if (r1 && r1.value) mesas = JSON.parse(r1.value);
+  } catch(e) { /* no data yet */ }
+  try {
+    const r2 = await window.storage.get('pacomer-ventas');
+    if (r2 && r2.value) ventas = JSON.parse(r2.value);
+  } catch(e) {}
+  try {
+    const r3 = await window.storage.get('pacomer-pedidos');
+    if (r3 && r3.value) pedidos = JSON.parse(r3.value);
+  } catch(e) {}
+  storageReady = true;
+  renderMesas();
+  renderPedidos();
+}
+
+async function save() {
+  try { await window.storage.set('pacomer-mesas', JSON.stringify(mesas)); } catch(e) {}
+  try { await window.storage.set('pacomer-ventas', JSON.stringify(ventas)); } catch(e) {}
+  try { await window.storage.set('pacomer-pedidos', JSON.stringify(pedidos)); } catch(e) {}
+}
+
+// ========== FORMATTERS ==========
+function formatCOP(n) {
+  return '$ ' + Math.round(n||0).toLocaleString('es-CO');
+}
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+// ========== NAV ==========
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  event.target.classList.add('active');
+  if(name==='registro') renderRegistro();
+  if(name==='mesas') renderStats();
+}
+
+// ========== MESAS ==========
+function renderMesas() {
+  const grid = document.getElementById('mesas-grid');
+  grid.innerHTML = '';
+  mesas.forEach(m => {
+    const div = document.createElement('div');
+    div.className = `mesa-card ${m.status}`;
+    const statusLabel = {libre:'Libre',ocupada:'Ocupada',pagada:'Pagada'}[m.status];
+    const statusColor = {libre:'libre',ocupada:'ocupada',pagada:'pagada'}[m.status];
+    div.innerHTML = `
+      <div class="mesa-label">Mesa</div>
+      <div class="mesa-num">${m.id}</div>
+      ${m.status!=='libre' ? `<div class="mesa-valor">${saldosOcultos ? '••••••' : formatCOP(m.valor)}</div>` : ''}
+      <div class="mesa-status ${statusColor}">${statusLabel}</div>
+    `;
+    div.onclick = () => openMesaModal(m);
+    grid.appendChild(div);
+  });
+  renderStats();
+}
+
+function renderStats() {
+  const ocupadas = mesas.filter(m=>m.status==='ocupada').length;
+  const libres = mesas.filter(m=>m.status==='libre').length;
+  const totalOcupado = mesas.filter(m=>m.status==='ocupada').reduce((s,m)=>s+m.valor,0);
+  const ventasHoy = ventas.filter(v=>v.fecha.startsWith(today()));
+  const totalHoy = ventasHoy.reduce((s,v)=>s+v.valor,0);
+  const mask = '••••••';
+  document.getElementById('mesas-badge').textContent = `${libres} libres · ${ocupadas} ocupadas`;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-card"><div class="stat-label">En Mesa Ahora</div><div class="stat-value">${saldosOcultos ? mask : formatCOP(totalOcupado)}</div><div class="stat-sub">${ocupadas} mesa(s) ocupada(s)</div></div>
+    <div class="stat-card"><div class="stat-label">Ventas Hoy</div><div class="stat-value">${saldosOcultos ? mask : formatCOP(totalHoy)}</div><div class="stat-sub">${ventasHoy.length} transacciones</div></div>
+    <div class="stat-card"><div class="stat-label">Mesas Libres</div><div class="stat-value">${libres}</div><div class="stat-sub">de 20 mesas</div></div>
+    <div class="stat-card"><div class="stat-label">Pedidos Pendientes</div><div class="stat-value">${pedidos.filter(p=>!p.pagado).length}</div><div class="stat-sub">sin cancelar</div></div>
+  `;
+}
+
+function openMesaModal(mesa) {
+  currentMesa = mesa;
+  document.getElementById('modal-mesa-title').textContent = `Mesa ${mesa.id}`;
+  document.getElementById('modal-mesa-sub').textContent = mesa.status==='libre' ? 'Mesa disponible — ingresa el valor del consumo' : mesa.status==='ocupada' ? `Valor actual: ${formatCOP(mesa.valor)}` : 'Mesa pagada — liberar o cancelar pago';
+  document.getElementById('mesa-valor-input').value = mesa.valor || '';
+
+  const actions = document.getElementById('modal-mesa-actions');
+  actions.innerHTML = '';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn btn-ghost';
+  cancelBtn.textContent = 'Cancelar';
+  cancelBtn.onclick = () => closeModal('modal-mesa');
+  actions.appendChild(cancelBtn);
+
+  if(mesa.status === 'libre') {
+    const ocuparBtn = document.createElement('button');
+    ocuparBtn.className = 'btn btn-primary';
+    ocuparBtn.textContent = 'Ocupar Mesa';
+    ocuparBtn.onclick = () => {
+      const val = parseInt(document.getElementById('mesa-valor-input').value)||0;
+      mesa.status = 'ocupada'; mesa.valor = val;
+      save(); renderMesas(); closeModal('modal-mesa');
+    };
+    actions.appendChild(ocuparBtn);
+  } else if(mesa.status === 'ocupada') {
+    const updateBtn = document.createElement('button');
+    updateBtn.className = 'btn btn-ghost';
+    updateBtn.textContent = 'Actualizar valor';
+    updateBtn.onclick = () => {
+      const val = parseInt(document.getElementById('mesa-valor-input').value)||0;
+      mesa.valor = val;
+      save(); renderMesas(); closeModal('modal-mesa');
+    };
+    actions.appendChild(updateBtn);
+    const pagarBtn = document.createElement('button');
+    pagarBtn.className = 'btn btn-success';
+    pagarBtn.textContent = '✓ Marcar Pagado';
+    pagarBtn.onclick = () => {
+      const val = parseInt(document.getElementById('mesa-valor-input').value)||mesa.valor||0;
+      ventas.push({id:Date.now(),mesa:mesa.id,valor:val,fecha:new Date().toISOString(),tipo:'mesa'});
+      mesa.status = 'libre'; mesa.valor = 0;
+      save(); renderMesas(); closeModal('modal-mesa');
+    };
+    actions.appendChild(pagarBtn);
+  }
+
+  document.getElementById('modal-mesa').classList.add('open');
+}
+
+// ========== PEDIDOS ==========
+function renderPedidos() {
+  const grid = document.getElementById('pedidos-grid');
+  grid.innerHTML = '';
+  pedidos.slice().reverse().forEach(p => {
+    const card = document.createElement('div');
+    card.className = `pedido-card ${p.pagado?'cancelado':''}`;
+    card.innerHTML = `
+      <div class="pedido-header">
+        <div>
+          <div class="pedido-cliente">${p.cliente}</div>
+          <div class="pedido-fecha">${formatDate(p.fecha)}</div>
+        </div>
+        <span class="pill ${p.pagado?'pagado':'pendiente'}">${p.pagado?'Cancelado':'Pendiente'}</span>
+      </div>
+      <div class="pedido-comanda">${p.comanda}</div>
+      <div class="pedido-footer">
+        <div class="pedido-valor">${formatCOP(p.valor)}</div>
+        <div class="pedido-actions">
+          ${!p.pagado ? `<button class="btn-pagar-p" onclick="pagarPedido(${p.id})">✓ Canceló</button>` : ''}
+          <button class="btn-eliminar-p" onclick="eliminarPedido(${p.id})">✕</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  const addBtn = document.createElement('div');
+  addBtn.className = 'add-pedido-btn';
+  addBtn.innerHTML = '<span class="plus">＋</span>Nuevo pedido pendiente';
+  addBtn.onclick = openPedidoModal;
+  grid.appendChild(addBtn);
+}
+
+function openPedidoModal() {
+  editingPedidoId = null;
+  document.getElementById('pedido-cliente-input').value = '';
+  document.getElementById('pedido-comanda-input').value = '';
+  document.getElementById('pedido-valor-input').value = '';
+  document.getElementById('modal-pedido-title').textContent = 'Nuevo pedido pendiente';
+  document.getElementById('modal-pedido').classList.add('open');
+}
+
+function savePedido() {
+  const cliente = document.getElementById('pedido-cliente-input').value.trim();
+  const comanda = document.getElementById('pedido-comanda-input').value.trim();
+  const valor = parseInt(document.getElementById('pedido-valor-input').value)||0;
+  if(!cliente){ alert('Ingresa el nombre del cliente'); return; }
+  pedidos.push({id:Date.now(),cliente,comanda,valor,pagado:false,fecha:new Date().toISOString()});
+  save(); renderPedidos(); closeModal('modal-pedido'); renderStats();
+}
+
+function pagarPedido(id) {
+  const p = pedidos.find(x=>x.id===id);
+  if(!p) return;
+  p.pagado = true;
+  ventas.push({id:Date.now(),mesa:`Cliente: ${p.cliente}`,valor:p.valor,fecha:new Date().toISOString(),tipo:'pedido'});
+  save(); renderPedidos(); renderStats();
+}
+
+function eliminarPedido(id) {
+  if(!confirm('¿Eliminar este pedido?')) return;
+  pedidos = pedidos.filter(p=>p.id!==id);
+  save(); renderPedidos(); renderStats();
+}
+
+// ========== REGISTRO ==========
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderRegistro();
+}
+
+function filterVentas(f) {
+  const now = new Date();
+  return ventas.filter(v => {
+    const d = new Date(v.fecha);
+    if(f==='hoy') return v.fecha.startsWith(today());
+    if(f==='semana') {
+      const start = new Date(now); start.setDate(now.getDate()-now.getDay()); start.setHours(0,0,0,0);
+      return d >= start;
+    }
+    if(f==='mes') return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+    return true;
+  }).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+}
+
+function renderRegistro() {
+  const data = filterVentas(currentFilter);
+  const total = data.reduce((s,v)=>s+v.valor,0);
+  const container = document.getElementById('registro-table');
+  const mask = '••••••';
+  if(!data.length) {
+    container.innerHTML = `<div class="empty-state"><div class="big">📋</div>No hay ventas en este período</div>`;
+    return;
+  }
+  container.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>#</th><th>Fecha</th><th>Mesa / Cliente</th><th>Tipo</th><th>Valor</th>
+      </tr></thead>
+      <tbody>
+        ${data.map((v,i)=>`
+          <tr>
+            <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3)">${data.length-i}</td>
+            <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2)">${formatDate(v.fecha)}</td>
+            <td>${v.mesa}</td>
+            <td><span class="pill pagado">${v.tipo==='mesa'?'Mesa':'Pedido'}</span></td>
+            <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent2);font-weight:600">${saldosOcultos ? mask : formatCOP(v.valor)}</td>
+          </tr>
+        `).join('')}
+        <tr style="font-weight:700;background:var(--bg3)">
+          <td colspan="4" style="text-align:right;padding-right:16px;font-size:13px;color:var(--text2)">TOTAL</td>
+          <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:16px;font-weight:700">${saldosOcultos ? mask : formatCOP(total)}</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+}
+
+// ========== CSV EXPORT ==========
+function exportCSV(periodo) {
+  const data = filterVentas(periodo);
+  const header = 'Numero,Fecha,Mesa_Cliente,Tipo,Valor_COP\n';
+  const rows = data.map((v,i)=>`${i+1},"${formatDate(v.fecha)}","${v.mesa}","${v.tipo==='mesa'?'Mesa':'Pedido'}",${v.valor}`).join('\n');
+  const csv = '\uFEFF' + header + rows;
+  const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const labels = {hoy:'hoy',semana:'semana',mes:'mes',todo:'todo'};
+  a.href = url; a.download = `ventas_${labels[periodo]}_${today()}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ========== TOGGLE SALDOS ==========
+let saldosOcultos = false;
+function toggleSaldos() {
+  saldosOcultos = !saldosOcultos;
+  const btn = document.getElementById('btn-toggle-saldos');
+  btn.innerHTML = saldosOcultos
+    ? '<span class="icon">👁</span> Mostrar saldos'
+    : '<span class="icon">👁</span> Ocultar saldos';
+  renderRegistro();
+  renderStats();
+  renderMesas();
+}
+
+// ========== BORRAR REGISTROS ==========
+function openBorrarModal() {
+  document.getElementById('borrar-confirm-input').value = '';
+  document.getElementById('modal-borrar').classList.add('open');
+}
+
+async function confirmarBorrar() {
+  const val = document.getElementById('borrar-confirm-input').value.trim();
+  if(val !== 'BORRAR') {
+    document.getElementById('borrar-confirm-input').style.borderColor = 'var(--red)';
+    document.getElementById('borrar-confirm-input').placeholder = '¡Debes escribir BORRAR exactamente!';
+    setTimeout(()=>{
+      document.getElementById('borrar-confirm-input').style.borderColor = '';
+    }, 1500);
+    return;
+  }
+  ventas = [];
+  await save();
+  closeModal('modal-borrar');
+  renderRegistro();
+  renderStats();
+}
+
+// ========== UTILS ==========
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ========== INIT ==========
+loadData();
+</script>
+</body>
+</html>
