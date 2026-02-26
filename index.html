@@ -153,6 +153,42 @@
 
   #db-loader{position:fixed;bottom:20px;right:20px;background:var(--accent3);color:#d8f3dc;padding:10px 18px;border-radius:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:opacity 0.3s;opacity:0;pointer-events:none;}
 
+  /* SLIDER SUBCUENTAS */
+  .sc-slider-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+  .sc-slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .sc-slider-label{font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;}
+  .sc-slider-count{font-size:20px;font-weight:700;color:var(--accent);font-family:'IBM Plex Mono',monospace;min-width:28px;text-align:right;}
+  .sc-slider-desc{font-size:11px;color:var(--text3);margin-top:2px;}
+  input[type=range].sc-slider{
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:6px;
+    background:linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,0%), var(--border) var(--pct,0%), var(--border) 100%);
+    border-radius:3px; outline:none; cursor:pointer;
+  }
+  input[type=range].sc-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px;
+    background:var(--accent); border-radius:50%;
+    box-shadow:0 2px 6px rgba(45,106,79,0.35);
+    transition:transform 0.15s;
+  }
+  input[type=range].sc-slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
+  .sc-slider-dots{display:flex;justify-content:space-between;padding:0 2px;margin-top:5px;}
+  .sc-slider-dots span{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
+
+  /* BOTÓN VACIAR MESAS */
+  .vaciar-btn{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 18px; border:1px solid rgba(192,57,43,0.35);
+    background:var(--card); border-radius:10px;
+    color:var(--red); font-family:'IBM Plex Mono',monospace;
+    font-size:12px; cursor:pointer; transition:all 0.2s; font-weight:500;
+    margin-bottom:20px;
+  }
+  .vaciar-btn:hover{background:rgba(192,57,43,0.07);border-color:var(--red);}
+
+  /* MODAL VACIAR */
+  .vaciar-confirm-box{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.2);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.6;}
+
   /* ══ FACTURA IMPRIMIBLE ══ */
   #factura-print{display:none;}
   @media print{
@@ -232,7 +268,10 @@
 <main>
   <div class="section active" id="sec-mesas">
     <div class="stats-bar" id="stats-bar"></div>
-    <div class="section-title">Mesas <span class="badge" id="mesas-badge">20 mesas</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+      <div class="section-title" style="margin-bottom:0">Mesas <span class="badge" id="mesas-badge">20 mesas</span></div>
+      <button class="vaciar-btn" onclick="openVaciarModal()">🧹 Vaciar todas las mesas</button>
+    </div>
     <div class="mesas-grid" id="mesas-grid"></div>
   </div>
 
@@ -303,6 +342,21 @@
         <label>Valor total (COP $)</label>
         <input type="number" id="mesa-valor-input" placeholder="0" min="0">
       </div>
+      <!-- Slider subcuentas -->
+      <div class="sc-slider-wrap" id="sc-slider-wrap">
+        <div class="sc-slider-header">
+          <div>
+            <div class="sc-slider-label">Subcuentas en esta mesa</div>
+            <div class="sc-slider-desc" id="sc-slider-desc">Sin subcuentas — una sola cuenta</div>
+          </div>
+          <div class="sc-slider-count" id="sc-slider-display">0</div>
+        </div>
+        <input type="range" class="sc-slider" id="sc-slider" min="0" max="10" value="0"
+               oninput="onSliderChange(this.value)">
+        <div class="sc-slider-dots">
+          <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+        </div>
+      </div>
     </div>
 
     <div class="modal-actions" id="modal-mesa-actions"></div>
@@ -368,6 +422,25 @@
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-borrar')">Cancelar</button>
       <button class="btn btn-danger" onclick="confirmarBorrar()">Eliminar todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL VACIAR MESAS ══ -->
+<div class="modal-overlay" id="modal-vaciar">
+  <div class="modal">
+    <div class="modal-title" style="color:var(--red)">🧹 Vaciar todas las mesas</div>
+    <div class="vaciar-confirm-box">
+      Esta acción pondrá las <strong>20 mesas en estado libre</strong>, eliminará todas las subcuentas pendientes y reiniciará los valores.<br><br>
+      ⚠️ Las ventas ya registradas <strong>no se borran</strong>. Solo se libera el estado actual de las mesas.
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Escribe <strong style="color:var(--red);font-family:'IBM Plex Mono',monospace">VACIAR</strong> para confirmar:</p>
+    <div class="form-group">
+      <input type="text" id="vaciar-confirm-input" placeholder="Escribe VACIAR para confirmar" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-vaciar')">Cancelar</button>
+      <button class="btn btn-danger" onclick="confirmarVaciar()">Vaciar todas</button>
     </div>
   </div>
 </div>
@@ -491,6 +564,9 @@ function renderStats(){
 function openMesaModal(mesa){
   currentMesa=mesa;
   document.getElementById('modal-mesa-title').textContent=`Mesa ${mesa.id}`;
+  // Reset slider
+  const sl=document.getElementById('sc-slider');
+  if(sl){ sl.value=0; onSliderChange(0); }
   renderModalSC();
   buildMesaActions();
   document.getElementById('modal-mesa').classList.add('open');
@@ -537,8 +613,11 @@ function renderModalSC(){
   });
 
   // Valor único
+  const sliderWrap=document.getElementById('sc-slider-wrap');
   document.getElementById('valor-unico-wrap').style.display=sc.length>0?'none':'block';
-  if(sc.length===0) document.getElementById('mesa-valor-input').value=m.valor||'';
+  if(sliderWrap) sliderWrap.style.display=(sc.length>0||m.status==='ocupada')?'none':'block';
+  if(sc.length===0 && m.status==='libre') document.getElementById('mesa-valor-input').value=m.valor||'';
+  if(sc.length===0 && m.status==='ocupada') document.getElementById('mesa-valor-input').value=m.valor||'';
 }
 
 function buildMesaActions(){
@@ -557,7 +636,16 @@ function buildMesaActions(){
     b.onclick=async()=>{
       m.valor=parseInt(document.getElementById('mesa-valor-input').value)||0;
       m.status='ocupada'; m.subcuentas=[];
-      await save(); renderMesas(); closeModal('modal-mesa');
+      // Aplicar slider si > 0
+      const sliderVal=parseInt(document.getElementById('sc-slider').value)||0;
+      for(let i=0;i<sliderVal;i++){
+        m.subcuentas.push({nombre:`Cliente ${i+1}`,valor:0,pagado:false,metodo:null,fechaPago:null});
+      }
+      document.getElementById('sc-slider').value=0; onSliderChange(0);
+      await save(); renderMesas();
+      // Si hay subcuentas abrir modal para llenar valores
+      if(m.subcuentas.length>0){ renderModalSC(); buildMesaActions(); }
+      else { closeModal('modal-mesa'); }
     };
     actions.appendChild(b);
   } else {
@@ -817,7 +905,51 @@ function exportCSV(periodo){
   a.href=URL.createObjectURL(blob); a.download=`ventas_${periodo}_${today()}.csv`; a.click();
 }
 
-// ═══ TOGGLE SALDOS ═══
+// ═══ SLIDER SUBCUENTAS ═══
+function onSliderChange(val){
+  val=parseInt(val);
+  const pct=((val/10)*100).toFixed(1)+'%';
+  document.getElementById('sc-slider').style.setProperty('--pct',pct);
+  document.getElementById('sc-slider-display').textContent=val;
+  const desc=val===0?'Sin subcuentas — una sola cuenta'
+            :val===1?'1 cliente — una subcuenta'
+            :`${val} clientes — ${val} subcuentas`;
+  document.getElementById('sc-slider-desc').textContent=desc;
+}
+
+function applySlider(){
+  const val=parseInt(document.getElementById('sc-slider').value);
+  if(val===0) return; // sin subcuentas, flujo normal
+  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
+  // Agregar las que faltan
+  const existing=currentMesa.subcuentas.length;
+  for(let i=existing;i<val;i++){
+    currentMesa.subcuentas.push({nombre:`Cliente ${i+1}`,valor:0,pagado:false,metodo:null,fechaPago:null});
+  }
+  currentMesa.status='ocupada';
+  document.getElementById('sc-slider').value=0;
+  onSliderChange(0);
+  renderModalSC(); buildMesaActions();
+}
+
+// ═══ VACIAR MESAS ═══
+function openVaciarModal(){
+  document.getElementById('vaciar-confirm-input').value='';
+  document.getElementById('modal-vaciar').classList.add('open');
+}
+
+async function confirmarVaciar(){
+  const val=document.getElementById('vaciar-confirm-input').value.trim();
+  if(val!=='VACIAR'){
+    const i=document.getElementById('vaciar-confirm-input');
+    i.style.borderColor='var(--red)'; i.placeholder='¡Escribe VACIAR exactamente!';
+    setTimeout(()=>{i.style.borderColor='';},1500);
+    return;
+  }
+  mesas=mesas.map(m=>({...m, status:'libre', valor:0, subcuentas:[]}));
+  await save();
+  closeModal('modal-vaciar'); renderMesas();
+}
 function toggleSaldos(){
   saldosOcultos=!saldosOcultos;
   document.getElementById('btn-toggle-saldos').innerHTML=saldosOcultos?'<span>👁</span> Mostrar saldos':'<span>👁</span> Ocultar saldos';
