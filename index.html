@@ -7,420 +7,240 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f0e8;
-    --bg2: #ede6d6;
-    --bg3: #e2d9c6;
-    --card: #ffffff;
-    --card2: #faf7f2;
-    --accent: #2d6a4f;
-    --accent2: #40916c;
-    --accent3: #1b4332;
-    --green: #40916c;
-    --green2: #2d6a4f;
-    --red: #c0392b;
-    --text: #1a2e1e;
-    --text2: #4a6355;
-    --text3: #8aab96;
-    --border: #c8d8cc;
-    --shadow: 0 4px 24px rgba(45,106,79,0.12);
+    --bg:#f5f0e8; --bg2:#ede6d6; --bg3:#e2d9c6;
+    --card:#ffffff; --card2:#faf7f2;
+    --accent:#2d6a4f; --accent2:#40916c; --accent3:#1b4332;
+    --green:#40916c; --green2:#2d6a4f;
+    --red:#c0392b; --blue:#2563eb; --blue2:#1d4ed8;
+    --text:#1a2e1e; --text2:#4a6355; --text3:#8aab96;
+    --border:#c8d8cc; --shadow:0 4px 24px rgba(45,106,79,0.12);
   }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  nav{background:var(--accent3);border-bottom:3px solid var(--accent);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'Fraunces',serif;font-style:italic;font-size:24px;color:#d8f3dc;}
+  .nav-logo span{color:var(--text3);font-size:13px;font-family:'IBM Plex Mono',monospace;margin-left:8px;font-style:normal;}
+  .nav-tabs{display:flex;gap:4px;}
+  .tab-btn{padding:8px 18px;border:none;background:transparent;color:#95c4a8;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border-radius:8px;transition:all 0.2s;}
+  .tab-btn:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+  .tab-btn.active{background:var(--accent2);color:#fff;font-weight:600;}
 
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+  main{padding:24px;max-width:1400px;margin:0 auto;}
+  .section{display:none;} .section.active{display:block;}
 
-  /* NAV */
-  nav {
-    background: var(--accent3);
-    border-bottom: 3px solid var(--accent);
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .nav-logo {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 24px;
-    color: #d8f3dc;
-    letter-spacing: 0.5px;
-  }
-  .nav-logo span { color: var(--text3); font-size: 13px; font-family: 'IBM Plex Mono', monospace; margin-left: 8px; font-style: normal; }
-  .nav-tabs { display: flex; gap: 4px; }
-  .tab-btn {
-    padding: 8px 18px;
-    border: none;
-    background: transparent;
-    color: #95c4a8;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-  }
-  .tab-btn:hover { background: rgba(255,255,255,0.1); color: #d8f3dc; }
-  .tab-btn.active { background: var(--accent2); color: #fff; font-weight: 600; }
+  .stats-bar{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;flex:1;min-width:160px;}
+  .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;}
+  .stat-value{font-size:24px;font-weight:700;color:var(--accent);margin-top:4px;font-family:'IBM Plex Mono',monospace;}
+  .stat-sub{font-size:12px;color:var(--text2);margin-top:2px;}
 
-  /* MAIN */
-  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .section-title{font-family:'Fraunces',serif;font-size:20px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .section-title .badge{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--bg3);color:var(--text2);padding:3px 8px;border-radius:20px;border:1px solid var(--border);}
 
-  /* SECTION */
-  .section { display: none; }
-  .section.active { display: block; }
+  .mesas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px;margin-bottom:32px;}
+  .mesa-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+  .mesa-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border);transition:background 0.2s;}
+  .mesa-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .mesa-card.ocupada{border-color:var(--accent3);}
+  .mesa-card.ocupada::before{background:var(--accent);}
+  .mesa-num{font-family:'Fraunces',serif;font-size:28px;color:var(--text);font-weight:900;}
+  .mesa-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;}
+  .mesa-valor{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--accent2);font-weight:600;margin-top:8px;}
+  .mesa-cuentas-badge{font-size:10px;color:var(--text3);margin-top:3px;font-family:'IBM Plex Mono',monospace;}
+  .mesa-status{display:inline-flex;align-items:center;font-size:11px;margin-top:6px;padding:3px 8px;border-radius:20px;font-weight:600;}
+  .mesa-status.libre{background:rgba(138,171,150,0.2);color:var(--text3);}
+  .mesa-status.ocupada{background:rgba(45,106,79,0.15);color:var(--accent);}
 
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .stat-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    flex: 1;
-    min-width: 160px;
-  }
-  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
-  .stat-value { font-size: 24px; font-weight: 700; color: var(--accent); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
-  .stat-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;max-width:500px;box-shadow:0 20px 60px rgba(45,106,79,0.15);animation:slideUp 0.2s ease;max-height:92vh;overflow-y:auto;}
+  .modal.wide{max-width:620px;}
+  @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .modal-title{font-family:'Fraunces',serif;font-size:22px;color:var(--accent);margin-bottom:6px;}
+  .modal-subtitle{color:var(--text2);font-size:13px;margin-bottom:20px;}
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;}
+  .form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+  .form-group input:focus,.form-group textarea:focus{border-color:var(--accent2);}
+  .form-group textarea{resize:vertical;min-height:70px;}
+  .modal-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .btn{flex:1;padding:12px;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;min-width:80px;}
+  .btn-primary{background:var(--accent);color:#fff;} .btn-primary:hover{background:var(--accent2);}
+  .btn-success{background:var(--green);color:white;} .btn-success:hover{background:var(--green2);}
+  .btn-danger{background:var(--red);color:white;} .btn-danger:hover{filter:brightness(1.1);}
+  .btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border);} .btn-ghost:hover{color:var(--text);border-color:var(--text3);}
+  .btn-blue{background:var(--blue);color:white;} .btn-blue:hover{background:var(--blue2);}
+  .btn-sm{flex:none;padding:8px 14px;font-size:13px;}
 
-  /* MESAS GRID */
-  .section-title {
-    font-family: 'Fraunces', serif;
-    font-size: 20px;
-    color: var(--text);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-title .badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    background: var(--bg3);
-    color: var(--text2);
-    padding: 3px 8px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-  }
+  /* SUBCUENTAS */
+  .mesa-total-bar{background:var(--accent3);color:#d8f3dc;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .mesa-total-label{font-size:12px;font-family:'IBM Plex Mono',monospace;opacity:0.8;}
+  .mesa-total-value{font-size:18px;font-family:'IBM Plex Mono',monospace;font-weight:700;}
+  .mesa-total-pendiente{font-size:12px;font-family:'IBM Plex Mono',monospace;color:#95c4a8;}
 
-  .mesas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 32px;
-  }
+  .subcuentas-list{margin-bottom:12px;}
+  .subcuenta-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .subcuenta-item.pagada-sc{opacity:0.55;border-left:3px solid var(--green);}
+  .subcuenta-info{flex:1;}
+  .subcuenta-nombre{font-weight:600;font-size:14px;color:var(--text);}
+  .subcuenta-valor{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent2);margin-top:2px;}
+  .subcuenta-metodo{font-size:11px;margin-top:3px;font-family:'IBM Plex Mono',monospace;}
+  .subcuenta-metodo.efectivo{color:#7a5500;}
+  .subcuenta-metodo.transferencia{color:var(--blue);}
+  .subcuenta-actions{display:flex;gap:6px;flex-shrink:0;}
+  .sc-btn{padding:6px 11px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;}
+  .sc-btn-pay{background:var(--green);color:white;} .sc-btn-pay:hover{filter:brightness(1.1);}
+  .sc-btn-print{background:var(--bg3);color:var(--text2);border:1px solid var(--border);} .sc-btn-print:hover{color:var(--accent);border-color:var(--accent);}
+  .sc-btn-del{background:var(--bg3);color:var(--text3);border:1px solid var(--border);} .sc-btn-del:hover{color:var(--red);border-color:var(--red);}
 
-  .mesa-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .mesa-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--border);
-    transition: background 0.2s;
-  }
-  .mesa-card:hover { border-color: var(--accent3); transform: translateY(-2px); box-shadow: var(--shadow); }
-  .mesa-card.ocupada { border-color: var(--accent3); }
-  .mesa-card.ocupada::before { background: var(--accent); }
-  .mesa-card.pagada { border-color: var(--green2); opacity: 0.7; }
-  .mesa-card.pagada::before { background: var(--green); }
+  .add-subcuenta-form{background:var(--bg3);border:1px dashed var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+  .form-row{display:flex;gap:10px;}
+  .form-row .form-group{flex:1;margin-bottom:0;}
+  .form-row-label{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
 
-  .mesa-num {
-    font-family: 'Fraunces', serif;
-    font-size: 28px;
-    color: var(--text);
-    font-weight: 900;
-  }
-  .mesa-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
-  .mesa-valor {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    color: var(--accent2);
-    font-weight: 600;
-    margin-top: 8px;
-  }
-  .mesa-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    margin-top: 6px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-weight: 600;
-  }
-  .mesa-status.libre { background: rgba(138,171,150,0.2); color: var(--text3); }
-  .mesa-status.ocupada { background: rgba(45,106,79,0.15); color: var(--accent); }
-  .mesa-status.pagada { background: rgba(64,145,108,0.15); color: var(--green); }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 28px;
-    width: 100%;
-    max-width: 440px;
-    box-shadow: 0 20px 60px rgba(45,106,79,0.15);
-    animation: slideUp 0.2s ease;
-  }
-  @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-
-  .modal-title {
-    font-family: 'Fraunces', serif;
-    font-size: 22px;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-  .modal-subtitle { color: var(--text2); font-size: 13px; margin-top: -14px; margin-bottom: 20px; }
-
-  .form-group { margin-bottom: 16px; }
-  .form-group label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-group input, .form-group textarea {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-group input:focus, .form-group textarea:focus { border-color: var(--accent2); }
-  .form-group textarea { resize: vertical; min-height: 80px; }
-
-  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-  .btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-primary { background: var(--accent); color: var(--bg); }
-  .btn-primary:hover { background: var(--accent2); }
-  .btn-success { background: var(--green); color: white; }
-  .btn-success:hover { background: var(--green2); }
-  .btn-danger { background: var(--red); color: white; }
-  .btn-danger:hover { filter: brightness(1.1); }
-  .btn-ghost { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
-  .btn-ghost:hover { color: var(--text); border-color: var(--text3); }
+  /* MÉTODO PAGO */
+  .metodo-selector{display:flex;gap:8px;margin-bottom:16px;}
+  .metodo-btn{flex:1;padding:11px;border:2px solid var(--border);border-radius:10px;background:var(--bg3);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;text-align:center;}
+  .metodo-btn.active-efectivo{border-color:#b07d10;background:rgba(176,125,16,0.1);color:#7a5500;}
+  .metodo-btn.active-transferencia{border-color:var(--blue);background:rgba(37,99,235,0.1);color:var(--blue);}
 
   /* REGISTRO */
-  .registro-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: gap; gap: 12px; }
-  .export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn-export {
-    padding: 9px 16px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    border-radius: 10px;
-    color: var(--text2);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn-export:hover { border-color: var(--accent2); color: var(--accent); }
-  .btn-export-danger { color: var(--red) !important; border-color: rgba(192,57,43,0.3) !important; }
-  .btn-export-danger:hover { border-color: var(--red) !important; background: rgba(192,57,43,0.08) !important; color: var(--red) !important; }
-  .btn-export .icon { font-size: 14px; }
+  .registro-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .export-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .btn-export{padding:9px 16px;border:1px solid var(--border);background:var(--card);border-radius:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+  .btn-export:hover{border-color:var(--accent2);color:var(--accent);}
+  .btn-export-danger{color:var(--red)!important;border-color:rgba(192,57,43,0.3)!important;}
+  .btn-export-danger:hover{border-color:var(--red)!important;background:rgba(192,57,43,0.08)!important;}
+  .registro-table{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  .registro-table table{width:100%;border-collapse:collapse;}
+  .registro-table th{background:var(--bg3);padding:11px 14px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);}
+  .registro-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(200,216,204,0.5);}
+  .registro-table tr:last-child td{border-bottom:none;}
+  .registro-table tr:hover td{background:var(--bg3);}
+  .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+  .pill.pagado{background:rgba(64,145,108,0.15);color:var(--green);}
+  .pill.pendiente{background:rgba(176,125,16,0.12);color:#7a5500;}
+  .pill.efectivo{background:rgba(176,125,16,0.12);color:#7a5500;}
+  .pill.transferencia{background:rgba(37,99,235,0.1);color:var(--blue);}
+  .empty-state{text-align:center;padding:48px;color:var(--text3);font-size:14px;}
+  .empty-state .big{font-size:40px;margin-bottom:12px;}
 
-  .registro-table {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-  }
-  .registro-table table { width: 100%; border-collapse: collapse; }
-  .registro-table th {
-    background: var(--bg3);
-    padding: 12px 16px;
-    text-align: left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--border);
-  }
-  .registro-table td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid rgba(74,56,32,0.4); }
-  .registro-table tr:last-child td { border-bottom: none; }
-  .registro-table tr:hover td { background: var(--bg3); }
-  .pill {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .pill.pagado { background: rgba(76,175,130,0.2); color: var(--green); }
-  .pill.pendiente { background: rgba(232,160,48,0.15); color: var(--accent); }
-  .empty-state { text-align: center; padding: 48px; color: var(--text3); font-size: 14px; }
-  .empty-state .big { font-size: 40px; margin-bottom: 12px; }
+  .pedidos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+  .pedido-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;transition:all 0.2s;}
+  .pedido-card.cancelado{border-color:var(--green2);opacity:0.6;}
+  .pedido-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+  .pedido-cliente{font-weight:600;font-size:16px;color:var(--text);}
+  .pedido-fecha{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);}
+  .pedido-comanda{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px;background:var(--bg3);padding:10px 12px;border-radius:8px;}
+  .pedido-footer{display:flex;align-items:center;justify-content:space-between;}
+  .pedido-valor{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--accent2);font-weight:600;}
+  .pedido-actions{display:flex;gap:6px;}
+  .pedido-actions button{padding:6px 12px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;}
+  .btn-pagar-p{background:var(--green);color:white;} .btn-pagar-p:hover{filter:brightness(1.1);}
+  .btn-eliminar-p{background:var(--bg3);color:var(--text3);border:1px solid var(--border);} .btn-eliminar-p:hover{color:var(--red);border-color:var(--red);}
+  .add-pedido-btn{background:var(--card);border:2px dashed var(--border);border-radius:16px;padding:18px;cursor:pointer;text-align:center;color:var(--text3);font-size:14px;transition:all 0.2s;}
+  .add-pedido-btn:hover{border-color:var(--accent3);color:var(--accent);}
+  .add-pedido-btn .plus{font-size:28px;display:block;margin-bottom:6px;}
 
-  /* PEDIDOS PENDIENTES */
-  .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-  .pedido-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    transition: all 0.2s;
-  }
-  .pedido-card.cancelado { border-color: var(--green2); opacity: 0.6; }
-  .pedido-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
-  .pedido-cliente { font-weight: 600; font-size: 16px; color: var(--text); }
-  .pedido-fecha { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); }
-  .pedido-comanda { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; background: var(--bg3); padding: 10px 12px; border-radius: 8px; }
-  .pedido-footer { display: flex; align-items: center; justify-content: space-between; }
-  .pedido-valor { font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--accent2); font-weight: 600; }
-  .pedido-actions { display: flex; gap: 6px; }
-  .pedido-actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-  .btn-pagar-p { background: var(--green); color: white; }
-  .btn-pagar-p:hover { filter: brightness(1.1); }
-  .btn-eliminar-p { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
-  .btn-eliminar-p:hover { color: var(--red); border-color: var(--red); }
-  .add-pedido-btn {
-    background: var(--card);
-    border: 2px dashed var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    cursor: pointer;
-    text-align: center;
-    color: var(--text3);
-    font-size: 14px;
-    transition: all 0.2s;
-  }
-  .add-pedido-btn:hover { border-color: var(--accent3); color: var(--accent); }
-  .add-pedido-btn .plus { font-size: 28px; display: block; margin-bottom: 6px; }
+  .filter-tabs{display:flex;gap:6px;margin-bottom:16px;}
+  .filter-tab{padding:7px 14px;border:1px solid var(--border);background:var(--card);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'IBM Plex Mono',monospace;}
+  .filter-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-  /* Date filter */
-  .date-filter { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .date-filter input {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: var(--text);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    outline: none;
+  #db-loader{position:fixed;bottom:20px;right:20px;background:var(--accent3);color:#d8f3dc;padding:10px 18px;border-radius:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:opacity 0.3s;opacity:0;pointer-events:none;}
+
+  /* ══ FACTURA IMPRIMIBLE ══ */
+  #factura-print{display:none;}
+  @media print{
+    body>*:not(#factura-print){display:none!important;}
+    #factura-print{
+      display:block!important;
+      font-family:'Courier New',Courier,monospace;
+      font-size:13px;color:#000;
+      width:72mm;margin:0 auto;padding:6mm 4mm;
+    }
+    .fp-center{text-align:center;}
+    .fp-logo{text-align:center;margin-bottom:4px;}
+    .fp-logo svg{width:52px;height:52px;}
+    .fp-nombre{text-align:center;font-size:22px;font-weight:bold;letter-spacing:2px;margin-bottom:2px;}
+    .fp-tagline{text-align:center;font-size:10px;color:#555;margin-bottom:12px;}
+    .fp-divider{border:none;border-top:1px dashed #333;margin:8px 0;}
+    .fp-row{display:flex;justify-content:space-between;margin:4px 0;font-size:12px;}
+    .fp-label{color:#555;}
+    .fp-value{font-weight:bold;}
+    .fp-total-box{border:2px solid #000;border-radius:4px;padding:8px 10px;margin:12px 0;text-align:center;}
+    .fp-total-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+    .fp-total-value{font-size:22px;font-weight:bold;}
+    .fp-metodo{text-align:center;margin:8px 0;font-size:12px;background:#f0f0f0;padding:5px;border-radius:3px;font-weight:bold;}
+    .fp-footer{text-align:center;font-size:10px;color:#666;margin-top:14px;line-height:1.6;}
+    .fp-gracias{text-align:center;font-size:14px;font-weight:bold;margin-top:8px;}
   }
-  .date-filter input:focus { border-color: var(--accent2); }
-  .date-filter label { font-size: 12px; color: var(--text2); }
-  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7) sepia(1) hue-rotate(5deg); }
-
-  .filter-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
-  .filter-tab {
-    padding: 7px 14px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    border-radius: 8px;
-    color: var(--text2);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .filter-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
 </style>
 </head>
 <body>
 
+<!-- FACTURA OCULTA PARA IMPRESIÓN -->
+<div id="factura-print">
+  <div class="fp-logo">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="46" r="24" fill="none" stroke="#000" stroke-width="2.5"/>
+      <ellipse cx="40" cy="46" rx="16" ry="16" fill="none" stroke="#000" stroke-width="1.5"/>
+      <line x1="22" y1="18" x2="22" y2="34" stroke="#000" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="19" y1="18" x2="19" y2="25" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="22" y1="18" x2="22" y2="25" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="25" y1="18" x2="25" y2="25" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="19" y1="25" x2="25" y2="25" stroke="#000" stroke-width="1.5"/>
+      <line x1="58" y1="18" x2="58" y2="36" stroke="#000" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M58 18 Q64 22 58 30" fill="none" stroke="#000" stroke-width="1.8"/>
+      <path d="M33 22 Q35 17 33 12" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M40 22 Q42 17 40 12" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M47 22 Q49 17 47 12" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="fp-nombre">PA COMER</div>
+  <div class="fp-tagline">Comprobante de pago</div>
+  <hr class="fp-divider">
+  <div class="fp-row"><span class="fp-label">Fecha:</span><span class="fp-value" id="fp-fecha">—</span></div>
+  <div class="fp-row"><span class="fp-label">Hora:</span><span class="fp-value" id="fp-hora">—</span></div>
+  <div class="fp-row"><span class="fp-label">Mesa:</span><span class="fp-value" id="fp-mesa">—</span></div>
+  <div class="fp-row"><span class="fp-label">Cliente:</span><span class="fp-value" id="fp-cliente">—</span></div>
+  <hr class="fp-divider">
+  <div class="fp-total-box">
+    <div class="fp-total-label">Total Pagado</div>
+    <div class="fp-total-value" id="fp-total">—</div>
+  </div>
+  <div class="fp-metodo" id="fp-metodo">—</div>
+  <hr class="fp-divider">
+  <div class="fp-footer">Este comprobante es válido como<br>constancia de pago interno.</div>
+  <div class="fp-gracias">¡Gracias por visitarnos! 🍽</div>
+</div>
+
+<!-- NAV -->
 <nav>
-  <div class="nav-logo">Pa Comer <span>POS v1.0</span></div>
+  <div class="nav-logo">Pa Comer <span>POS v2.0</span></div>
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="showSection('mesas')">🪑 Mesas</button>
-    <button class="tab-btn" onclick="showSection('pedidos')">📋 Pedidos</button>
-    <button class="tab-btn" onclick="showSection('registro')">📊 Registro</button>
+    <button class="tab-btn active" onclick="showSection('mesas',this)">🪑 Mesas</button>
+    <button class="tab-btn" onclick="showSection('pedidos',this)">📋 Pedidos</button>
+    <button class="tab-btn" onclick="showSection('registro',this)">📊 Registro</button>
   </div>
 </nav>
 
 <main>
-
-  <!-- SECTION MESAS -->
   <div class="section active" id="sec-mesas">
     <div class="stats-bar" id="stats-bar"></div>
     <div class="section-title">Mesas <span class="badge" id="mesas-badge">20 mesas</span></div>
     <div class="mesas-grid" id="mesas-grid"></div>
   </div>
 
-  <!-- SECTION PEDIDOS PENDIENTES -->
   <div class="section" id="sec-pedidos">
     <div class="section-title">Pedidos Pendientes</div>
-    <div class="pedidos-grid" id="pedidos-grid">
-      <div class="add-pedido-btn" onclick="openPedidoModal()">
-        <span class="plus">＋</span>
-        Nuevo pedido pendiente
-      </div>
-    </div>
+    <div class="pedidos-grid" id="pedidos-grid"></div>
   </div>
 
-  <!-- SECTION REGISTRO -->
   <div class="section" id="sec-registro">
     <div class="registro-header">
       <div>
@@ -433,47 +253,105 @@
         </div>
       </div>
       <div class="export-btns">
-        <button class="btn-export" id="btn-toggle-saldos" onclick="toggleSaldos()"><span class="icon">👁</span> Ocultar saldos</button>
-        <button class="btn-export" onclick="exportCSV('hoy')"><span class="icon">📥</span> CSV Hoy</button>
-        <button class="btn-export" onclick="exportCSV('semana')"><span class="icon">📥</span> CSV Semana</button>
-        <button class="btn-export" onclick="exportCSV('mes')"><span class="icon">📥</span> CSV Mes</button>
-        <button class="btn-export btn-export-danger" onclick="openBorrarModal()"><span class="icon">🗑</span> Borrar registros</button>
+        <button class="btn-export" id="btn-toggle-saldos" onclick="toggleSaldos()"><span>👁</span> Ocultar saldos</button>
+        <button class="btn-export" onclick="exportCSV('hoy')"><span>📥</span> CSV Hoy</button>
+        <button class="btn-export" onclick="exportCSV('semana')"><span>📥</span> CSV Semana</button>
+        <button class="btn-export" onclick="exportCSV('mes')"><span>📥</span> CSV Mes</button>
+        <button class="btn-export btn-export-danger" onclick="openBorrarModal()"><span>🗑</span> Borrar registros</button>
       </div>
     </div>
     <div class="registro-table" id="registro-table"></div>
   </div>
-
 </main>
 
-<!-- MODAL MESA -->
+<!-- ══ MODAL MESA (subcuentas) ══ -->
 <div class="modal-overlay" id="modal-mesa">
-  <div class="modal">
+  <div class="modal wide">
     <div class="modal-title" id="modal-mesa-title">Mesa #</div>
     <div class="modal-subtitle" id="modal-mesa-sub"></div>
-    <div class="form-group">
-      <label>Valor (COP $)</label>
-      <input type="number" id="mesa-valor-input" placeholder="0" min="0">
+
+    <div class="mesa-total-bar" id="mesa-total-bar" style="display:none">
+      <div>
+        <div class="mesa-total-label">Total mesa</div>
+        <div class="mesa-total-pendiente" id="mesa-total-pendiente"></div>
+      </div>
+      <div class="mesa-total-value" id="mesa-total-value">$ 0</div>
     </div>
+
+    <div class="subcuentas-list" id="subcuentas-list"></div>
+
+    <div class="add-subcuenta-form" id="add-sc-form" style="display:none">
+      <div class="form-row-label">➕ Nueva subcuenta</div>
+      <div class="form-row" style="margin-top:8px">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="sc-nombre" placeholder="Ej: Cliente 1">
+        </div>
+        <div class="form-group">
+          <label>Valor (COP)</label>
+          <input type="number" id="sc-valor" placeholder="0" min="0">
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="agregarSubcuenta()">Agregar</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleFormSC(false)">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="valor-unico-wrap">
+      <div class="form-group">
+        <label>Valor total (COP $)</label>
+        <input type="number" id="mesa-valor-input" placeholder="0" min="0">
+      </div>
+    </div>
+
     <div class="modal-actions" id="modal-mesa-actions"></div>
   </div>
 </div>
 
-<!-- MODAL PEDIDO -->
+<!-- ══ MODAL PAGO SUBCUENTA ══ -->
+<div class="modal-overlay" id="modal-pago-sc">
+  <div class="modal">
+    <div class="modal-title">Cobrar subcuenta</div>
+    <div class="modal-subtitle" id="pago-sc-sub"></div>
+    <div class="form-row-label" style="margin-bottom:8px">Método de pago</div>
+    <div class="metodo-selector">
+      <button class="metodo-btn active-efectivo" id="btn-efectivo" onclick="selectMetodo('efectivo')">💵 Efectivo</button>
+      <button class="metodo-btn" id="btn-transferencia" onclick="selectMetodo('transferencia')">📲 Transferencia</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pago-sc')">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarPagoSC(false)">✓ Confirmar</button>
+      <button class="btn btn-blue btn-sm" onclick="confirmarPagoSC(true)">🖨 Pagar e imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PAGO SIMPLE ══ -->
+<div class="modal-overlay" id="modal-pago-simple">
+  <div class="modal">
+    <div class="modal-title" id="pago-simple-title">Cobrar mesa</div>
+    <div class="modal-subtitle" id="pago-simple-sub"></div>
+    <div class="form-row-label" style="margin-bottom:8px">Método de pago</div>
+    <div class="metodo-selector">
+      <button class="metodo-btn active-efectivo" id="btn-ef-simple" onclick="selectMetodoSimple('efectivo')">💵 Efectivo</button>
+      <button class="metodo-btn" id="btn-tr-simple" onclick="selectMetodoSimple('transferencia')">📲 Transferencia</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pago-simple')">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarPagoSimple(false)">✓ Confirmar</button>
+      <button class="btn btn-blue btn-sm" onclick="confirmarPagoSimple(true)">🖨 Pagar e imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PEDIDO ══ -->
 <div class="modal-overlay" id="modal-pedido">
   <div class="modal">
-    <div class="modal-title" id="modal-pedido-title">Pedido pendiente</div>
-    <div class="form-group">
-      <label>Nombre del cliente</label>
-      <input type="text" id="pedido-cliente-input" placeholder="Ej: Juan García">
-    </div>
-    <div class="form-group">
-      <label>Comanda / Descripción del pedido</label>
-      <textarea id="pedido-comanda-input" placeholder="Ej: 2 almuerzos del día, 1 jugos natural de mango..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Valor Total (COP $)</label>
-      <input type="number" id="pedido-valor-input" placeholder="0" min="0">
-    </div>
+    <div class="modal-title">Nuevo pedido pendiente</div>
+    <div class="form-group"><label>Nombre del cliente</label><input type="text" id="pedido-cliente-input" placeholder="Ej: Juan García"></div>
+    <div class="form-group"><label>Comanda / Descripción</label><textarea id="pedido-comanda-input" placeholder="Ej: 2 almuerzos, 1 jugo de mango..."></textarea></div>
+    <div class="form-group"><label>Valor Total (COP $)</label><input type="number" id="pedido-valor-input" placeholder="0" min="0"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-pedido')">Cancelar</button>
       <button class="btn btn-primary" onclick="savePedido()">Guardar pedido</button>
@@ -481,14 +359,12 @@
   </div>
 </div>
 
-<!-- MODAL BORRAR REGISTROS -->
+<!-- ══ MODAL BORRAR ══ -->
 <div class="modal-overlay" id="modal-borrar">
   <div class="modal">
     <div class="modal-title" style="color:var(--red)">⚠ Borrar todos los registros</div>
-    <p style="color:var(--text2);font-size:13px;margin-bottom:20px;line-height:1.6">Esta acción eliminará <strong style="color:var(--text)">permanentemente</strong> todo el historial de ventas. Las mesas y pedidos no se verán afectados.<br><br>Para confirmar, escribe la palabra <strong style="color:var(--red);font-family:'IBM Plex Mono',monospace">BORRAR</strong> a continuación:</p>
-    <div class="form-group">
-      <input type="text" id="borrar-confirm-input" placeholder="Escribe BORRAR para confirmar" autocomplete="off">
-    </div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px;line-height:1.6">Esta acción eliminará <strong style="color:var(--text)">permanentemente</strong> todo el historial de ventas.<br><br>Escribe <strong style="color:var(--red);font-family:'IBM Plex Mono',monospace">BORRAR</strong> para confirmar:</p>
+    <div class="form-group"><input type="text" id="borrar-confirm-input" placeholder="Escribe BORRAR para confirmar" autocomplete="off"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-borrar')">Cancelar</button>
       <button class="btn btn-danger" onclick="confirmarBorrar()">Eliminar todo</button>
@@ -496,380 +372,474 @@
   </div>
 </div>
 
+<div id="db-loader"></div>
+
 <script>
-// ========== STATE ==========
-let mesas = Array.from({length:20},(_,i)=>({id:i+1,status:'libre',valor:0}));
-let ventas = [];
+// ═══ CONFIG ═══
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyyzKYNMRmKon2NPRdwka7DAottxKaDVVJMmXq8l3EJm4WDfPZmqJgDW3b53iBXazyIPA/exec';
+
+// ═══ ESTADO ═══
+let mesas   = Array.from({length:20},(_,i)=>({id:i+1,status:'libre',valor:0,subcuentas:[]}));
+let ventas  = [];
 let pedidos = [];
-let currentMesa = null;
-let currentFilter = 'hoy';
-let editingPedidoId = null;
+let currentFilter='hoy', saldosOcultos=false;
+let currentMesa=null, currentSCIdx=null;
+let metodoSC='efectivo', metodoSimple='efectivo';
 
-// ========== GOOGLE SHEETS BACKEND ==========
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyzKYNMRmKon2NPRdwka7DAottxKaDVVJMmXq8l3EJm4WDfPZmqJgDW3b53iBXazyIPA/exec';
+// ═══ TOAST ═══
+let _lt;
+function showLoader(msg){const e=document.getElementById('db-loader');e.textContent=msg;e.style.opacity='1';clearTimeout(_lt);}
+function hideLoader(d=900){_lt=setTimeout(()=>{document.getElementById('db-loader').style.opacity='0';},d);}
 
-function showLoader(msg) {
-  let el = document.getElementById('db-loader');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'db-loader';
-    el.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--accent3);color:#d8f3dc;padding:10px 18px;border-radius:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:opacity 0.3s;';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.style.opacity = '1';
-}
-function hideLoader() {
-  const el = document.getElementById('db-loader');
-  if (el) el.style.opacity = '0';
+// ═══ SHEETS API ═══
+function safeJSON(s,fb){try{return JSON.parse(s);}catch(e){return fb;}}
+
+async function sheetGet(t){return fetch(`${SCRIPT_URL}?action=get&table=${t}`).then(r=>r.json());}
+async function sheetSet(t,data){
+  return fetch(`${SCRIPT_URL}?action=set&table=${t}&data=${encodeURIComponent(JSON.stringify(data))}`).then(r=>r.json());
 }
 
-async function loadData() {
+async function loadData(){
   showLoader('⏳ Cargando datos...');
-  try {
-    const [r1, r2, r3] = await Promise.all([
-      fetch(`${SCRIPT_URL}?action=get&table=mesas`).then(r=>r.json()),
-      fetch(`${SCRIPT_URL}?action=get&table=ventas`).then(r=>r.json()),
-      fetch(`${SCRIPT_URL}?action=get&table=pedidos`).then(r=>r.json()),
-    ]);
-
-    if (r1.data && r1.data.length > 1)
-      mesas = r1.data.slice(1).map(row => ({
-        id: Number(row[0]), status: row[1] || 'libre', valor: Number(row[2]) || 0
-      }));
-
-    if (r2.data && r2.data.length > 1)
-      ventas = r2.data.slice(1).map(row => ({
-        id: row[0], mesa: row[1], valor: Number(row[2]) || 0, fecha: row[3], tipo: row[4]
-      }));
-
-    if (r3.data && r3.data.length > 1)
-      pedidos = r3.data.slice(1).map(row => ({
-        id: row[0], cliente: row[1], comanda: row[2],
-        valor: Number(row[3]) || 0,
-        pagado: row[4] === true || row[4] === 'TRUE' || row[4] === 'true',
-        fecha: row[5]
-      }));
-
+  try{
+    const[r1,r2,r3]=await Promise.all([sheetGet('mesas'),sheetGet('ventas'),sheetGet('pedidos')]);
+    if(r1.data&&r1.data.length>1)
+      mesas=r1.data.slice(1).map(r=>({id:Number(r[0]),status:r[1]||'libre',valor:Number(r[2])||0,subcuentas:safeJSON(r[3],[])}));
+    if(r2.data&&r2.data.length>1)
+      ventas=r2.data.slice(1).map(r=>({id:r[0],mesa:r[1],cliente:r[2]||'',valor:Number(r[3])||0,fecha:r[4],tipo:r[5],metodo:r[6]||'efectivo'}));
+    if(r3.data&&r3.data.length>1)
+      pedidos=r3.data.slice(1).map(r=>({id:r[0],cliente:r[1],comanda:r[2],valor:Number(r[3])||0,pagado:r[4]===true||r[4]==='TRUE'||r[4]==='true',fecha:r[5]}));
     hideLoader();
-  } catch(e) {
-    showLoader('❌ Error al conectar con la base de datos');
-    setTimeout(hideLoader, 3000);
-    console.error(e);
-  }
-  renderMesas();
-  renderPedidos();
+  }catch(e){showLoader('❌ Error al conectar');setTimeout(hideLoader,3000);}
+  renderMesas();renderPedidos();
 }
 
-async function saveTable(table, data) {
-  const url = `${SCRIPT_URL}?action=set&table=${table}&data=${encodeURIComponent(JSON.stringify(data))}`;
-  const r = await fetch(url);
-  const json = await r.json();
-  if (!json.ok) throw new Error(json.error);
-}
-
-async function save() {
+async function save(){
   showLoader('💾 Guardando...');
-  const mesasData   = [['id','status','valor'],                    ...mesas.map(m=>[m.id, m.status, m.valor])];
-  const ventasData  = [['id','mesa','valor','fecha','tipo'],        ...ventas.map(v=>[v.id, v.mesa, v.valor, v.fecha, v.tipo])];
-  const pedidosData = [['id','cliente','comanda','valor','pagado','fecha'], ...pedidos.map(p=>[p.id, p.cliente, p.comanda, p.valor, p.pagado, p.fecha])];
-
-  try {
-    await saveTable('mesas',   mesasData);
-    await saveTable('ventas',  ventasData);
-    await saveTable('pedidos', pedidosData);
+  const mD=[['id','status','valor','subcuentas'],...mesas.map(m=>[m.id,m.status,m.valor,JSON.stringify(m.subcuentas||[])])];
+  const vD=[['id','mesa','cliente','valor','fecha','tipo','metodo'],...ventas.map(v=>[v.id,v.mesa,v.cliente||'',v.valor,v.fecha,v.tipo,v.metodo||'efectivo'])];
+  const pD=[['id','cliente','comanda','valor','pagado','fecha'],...pedidos.map(p=>[p.id,p.cliente,p.comanda,p.valor,p.pagado,p.fecha])];
+  try{
+    await sheetSet('mesas',mD);
+    await sheetSet('ventas',vD);
+    await sheetSet('pedidos',pD);
     hideLoader();
-  } catch(e) {
-    showLoader('❌ Error al guardar: ' + e.message);
-    setTimeout(hideLoader, 4000);
-    console.error(e);
-  }
+  }catch(e){showLoader('❌ Error al guardar');setTimeout(hideLoader,4000);}
 }
 
-// ========== FORMATTERS ==========
-function formatCOP(n) {
-  return '$ ' + Math.round(n||0).toLocaleString('es-CO');
-}
+// ═══ UTILS ═══
+function formatCOP(n){'$';return '$ '+Math.round(n||0).toLocaleString('es-CO');}
+function today(){return new Date().toISOString().split('T')[0];}
+function formatDate(iso){return new Date(iso).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+function formatDateLong(iso){return new Date(iso).toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});}
+function formatHora(iso){return new Date(iso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});}
 
-function today() { return new Date().toISOString().split('T')[0]; }
-
-function formatDate(iso) {
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-}
-
-// ========== NAV ==========
-function showSection(name) {
+// ═══ NAV ═══
+function showSection(name,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sec-'+name).classList.add('active');
-  event.target.classList.add('active');
-  if(name==='registro') renderRegistro();
-  if(name==='mesas') renderStats();
+  btn.classList.add('active');
+  if(name==='registro')renderRegistro();
+  if(name==='mesas')renderStats();
 }
 
-// ========== MESAS ==========
-function renderMesas() {
-  const grid = document.getElementById('mesas-grid');
-  grid.innerHTML = '';
-  mesas.forEach(m => {
-    const div = document.createElement('div');
-    div.className = `mesa-card ${m.status}`;
-    const statusLabel = {libre:'Libre',ocupada:'Ocupada',pagada:'Pagada'}[m.status];
-    const statusColor = {libre:'libre',ocupada:'ocupada',pagada:'pagada'}[m.status];
-    div.innerHTML = `
+// ═══ MESAS ═══
+function renderMesas(){
+  const grid=document.getElementById('mesas-grid');
+  grid.innerHTML='';
+  mesas.forEach(m=>{
+    const sc=m.subcuentas||[];
+    const totalSC=sc.reduce((s,c)=>s+c.valor,0);
+    const pendientes=sc.filter(c=>!c.pagado).length;
+    const div=document.createElement('div');
+    div.className=`mesa-card ${m.status}`;
+    const mostrar=sc.length>0?totalSC:m.valor;
+    div.innerHTML=`
       <div class="mesa-label">Mesa</div>
       <div class="mesa-num">${m.id}</div>
-      ${m.status!=='libre' ? `<div class="mesa-valor">${saldosOcultos ? '••••••' : formatCOP(m.valor)}</div>` : ''}
-      <div class="mesa-status ${statusColor}">${statusLabel}</div>
+      ${m.status!=='libre'?`<div class="mesa-valor">${saldosOcultos?'••••••':formatCOP(mostrar)}</div>`:''}
+      ${sc.length>0?`<div class="mesa-cuentas-badge">${sc.length} cuenta(s)${pendientes>0?` · ${pendientes} pend.`:' · ✓ todas pagas'}</div>`:''}
+      <div class="mesa-status ${m.status}">${m.status==='libre'?'Libre':'Ocupada'}</div>
     `;
-    div.onclick = () => openMesaModal(m);
+    div.onclick=()=>openMesaModal(m);
     grid.appendChild(div);
   });
   renderStats();
 }
 
-function renderStats() {
-  const ocupadas = mesas.filter(m=>m.status==='ocupada').length;
-  const libres = mesas.filter(m=>m.status==='libre').length;
-  const totalOcupado = mesas.filter(m=>m.status==='ocupada').reduce((s,m)=>s+m.valor,0);
-  const ventasHoy = ventas.filter(v=>v.fecha.startsWith(today()));
-  const totalHoy = ventasHoy.reduce((s,v)=>s+v.valor,0);
-  const mask = '••••••';
-  document.getElementById('mesas-badge').textContent = `${libres} libres · ${ocupadas} ocupadas`;
-  document.getElementById('stats-bar').innerHTML = `
-    <div class="stat-card"><div class="stat-label">En Mesa Ahora</div><div class="stat-value">${saldosOcultos ? mask : formatCOP(totalOcupado)}</div><div class="stat-sub">${ocupadas} mesa(s) ocupada(s)</div></div>
-    <div class="stat-card"><div class="stat-label">Ventas Hoy</div><div class="stat-value">${saldosOcultos ? mask : formatCOP(totalHoy)}</div><div class="stat-sub">${ventasHoy.length} transacciones</div></div>
+function renderStats(){
+  const ocupadas=mesas.filter(m=>m.status==='ocupada').length;
+  const libres=mesas.filter(m=>m.status==='libre').length;
+  const totalOcup=mesas.filter(m=>m.status==='ocupada').reduce((s,m)=>{
+    const sc=m.subcuentas||[];
+    return s+(sc.length>0?sc.reduce((a,c)=>a+c.valor,0):m.valor);
+  },0);
+  const vHoy=ventas.filter(v=>v.fecha.startsWith(today()));
+  const tHoy=vHoy.reduce((s,v)=>s+v.valor,0);
+  const mask='••••••';
+  document.getElementById('mesas-badge').textContent=`${libres} libres · ${ocupadas} ocupadas`;
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-card"><div class="stat-label">En Mesa Ahora</div><div class="stat-value">${saldosOcultos?mask:formatCOP(totalOcup)}</div><div class="stat-sub">${ocupadas} mesa(s)</div></div>
+    <div class="stat-card"><div class="stat-label">Ventas Hoy</div><div class="stat-value">${saldosOcultos?mask:formatCOP(tHoy)}</div><div class="stat-sub">${vHoy.length} transacciones</div></div>
     <div class="stat-card"><div class="stat-label">Mesas Libres</div><div class="stat-value">${libres}</div><div class="stat-sub">de 20 mesas</div></div>
-    <div class="stat-card"><div class="stat-label">Pedidos Pendientes</div><div class="stat-value">${pedidos.filter(p=>!p.pagado).length}</div><div class="stat-sub">sin cancelar</div></div>
+    <div class="stat-card"><div class="stat-label">Pedidos Pend.</div><div class="stat-value">${pedidos.filter(p=>!p.pagado).length}</div><div class="stat-sub">sin cancelar</div></div>
   `;
 }
 
-function openMesaModal(mesa) {
-  currentMesa = mesa;
-  document.getElementById('modal-mesa-title').textContent = `Mesa ${mesa.id}`;
-  document.getElementById('modal-mesa-sub').textContent = mesa.status==='libre' ? 'Mesa disponible — ingresa el valor del consumo' : mesa.status==='ocupada' ? `Valor actual: ${formatCOP(mesa.valor)}` : 'Mesa pagada — liberar o cancelar pago';
-  document.getElementById('mesa-valor-input').value = mesa.valor || '';
-
-  const actions = document.getElementById('modal-mesa-actions');
-  actions.innerHTML = '';
-
-  const cancelBtn = document.createElement('button');
-  cancelBtn.className = 'btn btn-ghost';
-  cancelBtn.textContent = 'Cancelar';
-  cancelBtn.onclick = () => closeModal('modal-mesa');
-  actions.appendChild(cancelBtn);
-
-  if(mesa.status === 'libre') {
-    const ocuparBtn = document.createElement('button');
-    ocuparBtn.className = 'btn btn-primary';
-    ocuparBtn.textContent = 'Ocupar Mesa';
-    ocuparBtn.onclick = () => {
-      const val = parseInt(document.getElementById('mesa-valor-input').value)||0;
-      mesa.status = 'ocupada'; mesa.valor = val;
-      save(); renderMesas(); closeModal('modal-mesa');
-    };
-    actions.appendChild(ocuparBtn);
-  } else if(mesa.status === 'ocupada') {
-    const updateBtn = document.createElement('button');
-    updateBtn.className = 'btn btn-ghost';
-    updateBtn.textContent = 'Actualizar valor';
-    updateBtn.onclick = () => {
-      const val = parseInt(document.getElementById('mesa-valor-input').value)||0;
-      mesa.valor = val;
-      save(); renderMesas(); closeModal('modal-mesa');
-    };
-    actions.appendChild(updateBtn);
-    const pagarBtn = document.createElement('button');
-    pagarBtn.className = 'btn btn-success';
-    pagarBtn.textContent = '✓ Marcar Pagado';
-    pagarBtn.onclick = () => {
-      const val = parseInt(document.getElementById('mesa-valor-input').value)||mesa.valor||0;
-      ventas.push({id:Date.now(),mesa:mesa.id,valor:val,fecha:new Date().toISOString(),tipo:'mesa'});
-      mesa.status = 'libre'; mesa.valor = 0;
-      save(); renderMesas(); closeModal('modal-mesa');
-    };
-    actions.appendChild(pagarBtn);
-  }
-
+// ═══ MODAL MESA ═══
+function openMesaModal(mesa){
+  currentMesa=mesa;
+  document.getElementById('modal-mesa-title').textContent=`Mesa ${mesa.id}`;
+  renderModalSC();
+  buildMesaActions();
   document.getElementById('modal-mesa').classList.add('open');
 }
 
-// ========== PEDIDOS ==========
-function renderPedidos() {
-  const grid = document.getElementById('pedidos-grid');
-  grid.innerHTML = '';
-  pedidos.slice().reverse().forEach(p => {
-    const card = document.createElement('div');
-    card.className = `pedido-card ${p.pagado?'cancelado':''}`;
-    card.innerHTML = `
+function renderModalSC(){
+  const m=currentMesa, sc=m.subcuentas||[];
+  const total=sc.reduce((s,c)=>s+c.valor,0);
+  const pend=sc.filter(c=>!c.pagado).reduce((s,c)=>s+c.valor,0);
+  const sub=document.getElementById('modal-mesa-sub');
+
+  // Total bar
+  const bar=document.getElementById('mesa-total-bar');
+  if(sc.length>0){
+    bar.style.display='flex';
+    document.getElementById('mesa-total-value').textContent=formatCOP(total);
+    document.getElementById('mesa-total-pendiente').textContent=`Pendiente: ${formatCOP(pend)}`;
+    sub.textContent=`${sc.length} subcuenta(s) · ${sc.filter(c=>!c.pagado).length} por cobrar`;
+  } else {
+    bar.style.display='none';
+    sub.textContent=m.status==='libre'?'Mesa disponible — ingresa el valor del consumo':`Valor actual: ${formatCOP(m.valor)}`;
+  }
+
+  // Lista
+  const list=document.getElementById('subcuentas-list');
+  list.innerHTML='';
+  sc.forEach((c,idx)=>{
+    const item=document.createElement('div');
+    item.className=`subcuenta-item${c.pagado?' pagada-sc':''}`;
+    item.innerHTML=`
+      <div class="subcuenta-info">
+        <div class="subcuenta-nombre">${c.nombre}</div>
+        <div class="subcuenta-valor">${formatCOP(c.valor)}</div>
+        ${c.pagado?`<div class="subcuenta-metodo ${c.metodo}">${c.metodo==='transferencia'?'📲 Transferencia':'💵 Efectivo'}</div>`:''}
+      </div>
+      <div class="subcuenta-actions">
+        ${!c.pagado?`<button class="sc-btn sc-btn-pay" onclick="abrirPagoSC(${idx})">Cobrar</button>`
+                   :`<span style="font-size:11px;color:var(--green);font-weight:600;white-space:nowrap">✓ Pagado</span>`}
+        ${c.pagado?`<button class="sc-btn sc-btn-print" onclick="imprimirFacturaSC(${idx})">🖨</button>`:''}
+        ${!c.pagado?`<button class="sc-btn sc-btn-del" onclick="eliminarSC(${idx})">✕</button>`:''}
+      </div>
+    `;
+    list.appendChild(item);
+  });
+
+  // Valor único
+  document.getElementById('valor-unico-wrap').style.display=sc.length>0?'none':'block';
+  if(sc.length===0) document.getElementById('mesa-valor-input').value=m.valor||'';
+}
+
+function buildMesaActions(){
+  const m=currentMesa, sc=m.subcuentas||[];
+  const actions=document.getElementById('modal-mesa-actions');
+  actions.innerHTML='';
+
+  const cerrar=document.createElement('button');
+  cerrar.className='btn btn-ghost'; cerrar.textContent='Cerrar';
+  cerrar.onclick=()=>closeModal('modal-mesa');
+  actions.appendChild(cerrar);
+
+  if(m.status==='libre'){
+    const b=document.createElement('button');
+    b.className='btn btn-primary'; b.textContent='Ocupar Mesa';
+    b.onclick=async()=>{
+      m.valor=parseInt(document.getElementById('mesa-valor-input').value)||0;
+      m.status='ocupada'; m.subcuentas=[];
+      await save(); renderMesas(); closeModal('modal-mesa');
+    };
+    actions.appendChild(b);
+  } else {
+    // Botón añadir subcuenta
+    const sc_btn=document.createElement('button');
+    sc_btn.className='btn btn-ghost btn-sm'; sc_btn.textContent='+ Subcuenta';
+    sc_btn.onclick=()=>toggleFormSC(true);
+    actions.appendChild(sc_btn);
+
+    if(sc.length===0){
+      const upd=document.createElement('button');
+      upd.className='btn btn-ghost btn-sm'; upd.textContent='Actualizar';
+      upd.onclick=async()=>{
+        m.valor=parseInt(document.getElementById('mesa-valor-input').value)||0;
+        await save(); renderMesas(); closeModal('modal-mesa');
+      };
+      actions.appendChild(upd);
+
+      const pagar=document.createElement('button');
+      pagar.className='btn btn-success'; pagar.textContent='✓ Cobrar mesa';
+      pagar.onclick=()=>abrirPagoSimple();
+      actions.appendChild(pagar);
+    } else {
+      const todasPagas=sc.length>0&&sc.every(c=>c.pagado);
+      if(todasPagas){
+        const lib=document.createElement('button');
+        lib.className='btn btn-primary'; lib.textContent='Liberar Mesa';
+        lib.onclick=async()=>{
+          m.status='libre'; m.valor=0; m.subcuentas=[];
+          await save(); renderMesas(); closeModal('modal-mesa');
+        };
+        actions.appendChild(lib);
+      }
+    }
+  }
+}
+
+function toggleFormSC(show){
+  document.getElementById('add-sc-form').style.display=show?'block':'none';
+  if(show) document.getElementById('sc-nombre').focus();
+}
+
+function agregarSubcuenta(){
+  const nombre=document.getElementById('sc-nombre').value.trim()||`Cliente ${(currentMesa.subcuentas||[]).length+1}`;
+  const valor=parseInt(document.getElementById('sc-valor').value)||0;
+  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
+  currentMesa.subcuentas.push({nombre,valor,pagado:false,metodo:null,fechaPago:null});
+  currentMesa.status='ocupada';
+  document.getElementById('sc-nombre').value='';
+  document.getElementById('sc-valor').value='';
+  toggleFormSC(false);
+  renderModalSC(); buildMesaActions(); save();
+}
+
+function eliminarSC(idx){
+  currentMesa.subcuentas.splice(idx,1);
+  renderModalSC(); buildMesaActions(); save();
+}
+
+// ═══ PAGO SUBCUENTA ═══
+function abrirPagoSC(idx){
+  currentSCIdx=idx;
+  metodoSC='efectivo';
+  const sc=currentMesa.subcuentas[idx];
+  document.getElementById('pago-sc-sub').textContent=`${sc.nombre} · ${formatCOP(sc.valor)}`;
+  selectMetodo('efectivo');
+  document.getElementById('modal-pago-sc').classList.add('open');
+}
+
+function selectMetodo(m){
+  metodoSC=m;
+  document.getElementById('btn-efectivo').className='metodo-btn'+(m==='efectivo'?' active-efectivo':'');
+  document.getElementById('btn-transferencia').className='metodo-btn'+(m==='transferencia'?' active-transferencia':'');
+}
+
+async function confirmarPagoSC(imprimir){
+  const sc=currentMesa.subcuentas[currentSCIdx];
+  sc.pagado=true; sc.metodo=metodoSC; sc.fechaPago=new Date().toISOString();
+  ventas.push({id:String(Date.now()),mesa:String(currentMesa.id),cliente:sc.nombre,valor:sc.valor,fecha:sc.fechaPago,tipo:'mesa',metodo:metodoSC});
+  const todasPagas=currentMesa.subcuentas.every(c=>c.pagado);
+  if(todasPagas){currentMesa.status='libre';}
+  await save();
+  closeModal('modal-pago-sc');
+  renderModalSC(); buildMesaActions(); renderMesas();
+  if(imprimir) imprimirFacturaSC(currentSCIdx);
+  if(todasPagas) closeModal('modal-mesa');
+}
+
+function imprimirFacturaSC(idx){
+  const sc=currentMesa.subcuentas[idx];
+  const f=sc.fechaPago||new Date().toISOString();
+  rellenarFactura({
+    fecha:formatDateLong(f), hora:formatHora(f),
+    mesa:`Mesa ${currentMesa.id}`, cliente:sc.nombre,
+    valor:formatCOP(sc.valor), metodo:sc.metodo||'efectivo'
+  });
+  window.print();
+}
+
+// ═══ PAGO SIMPLE ═══
+function abrirPagoSimple(){
+  metodoSimple='efectivo';
+  const val=parseInt(document.getElementById('mesa-valor-input').value)||currentMesa.valor||0;
+  currentMesa.valor=val;
+  document.getElementById('pago-simple-title').textContent=`Cobrar Mesa ${currentMesa.id}`;
+  document.getElementById('pago-simple-sub').textContent=`Total: ${formatCOP(val)}`;
+  selectMetodoSimple('efectivo');
+  document.getElementById('modal-pago-simple').classList.add('open');
+}
+
+function selectMetodoSimple(m){
+  metodoSimple=m;
+  document.getElementById('btn-ef-simple').className='metodo-btn'+(m==='efectivo'?' active-efectivo':'');
+  document.getElementById('btn-tr-simple').className='metodo-btn'+(m==='transferencia'?' active-transferencia':'');
+}
+
+async function confirmarPagoSimple(imprimir){
+  const val=currentMesa.valor;
+  const fecha=new Date().toISOString();
+  ventas.push({id:String(Date.now()),mesa:String(currentMesa.id),cliente:'',valor:val,fecha,tipo:'mesa',metodo:metodoSimple});
+  currentMesa.status='libre'; currentMesa.valor=0; currentMesa.subcuentas=[];
+  await save();
+  closeModal('modal-pago-simple'); closeModal('modal-mesa');
+  renderMesas();
+  if(imprimir){
+    rellenarFactura({fecha:formatDateLong(fecha),hora:formatHora(fecha),mesa:`Mesa ${currentMesa.id}`,cliente:'Mesa completa',valor:formatCOP(val),metodo:metodoSimple});
+    window.print();
+  }
+}
+
+// ═══ FACTURA ═══
+function rellenarFactura({fecha,hora,mesa,cliente,valor,metodo}){
+  document.getElementById('fp-fecha').textContent=fecha;
+  document.getElementById('fp-hora').textContent=hora;
+  document.getElementById('fp-mesa').textContent=mesa;
+  document.getElementById('fp-cliente').textContent=cliente||'—';
+  document.getElementById('fp-total').textContent=valor;
+  document.getElementById('fp-metodo').textContent=metodo==='transferencia'?'📲 Pago por Transferencia':'💵 Pago en Efectivo';
+}
+
+// ═══ PEDIDOS ═══
+function renderPedidos(){
+  const grid=document.getElementById('pedidos-grid');
+  grid.innerHTML='';
+  pedidos.slice().reverse().forEach(p=>{
+    const card=document.createElement('div');
+    card.className=`pedido-card${p.pagado?' cancelado':''}`;
+    card.innerHTML=`
       <div class="pedido-header">
-        <div>
-          <div class="pedido-cliente">${p.cliente}</div>
-          <div class="pedido-fecha">${formatDate(p.fecha)}</div>
-        </div>
+        <div><div class="pedido-cliente">${p.cliente}</div><div class="pedido-fecha">${formatDate(p.fecha)}</div></div>
         <span class="pill ${p.pagado?'pagado':'pendiente'}">${p.pagado?'Cancelado':'Pendiente'}</span>
       </div>
-      <div class="pedido-comanda">${p.comanda}</div>
+      <div class="pedido-comanda">${p.comanda||'—'}</div>
       <div class="pedido-footer">
         <div class="pedido-valor">${formatCOP(p.valor)}</div>
         <div class="pedido-actions">
-          ${!p.pagado ? `<button class="btn-pagar-p" onclick="pagarPedido(${p.id})">✓ Canceló</button>` : ''}
-          <button class="btn-eliminar-p" onclick="eliminarPedido(${p.id})">✕</button>
+          ${!p.pagado?`<button class="btn-pagar-p" onclick="pagarPedido('${p.id}')">✓ Canceló</button>`:''}
+          <button class="btn-eliminar-p" onclick="eliminarPedido('${p.id}')">✕</button>
         </div>
       </div>
     `;
     grid.appendChild(card);
   });
-  const addBtn = document.createElement('div');
-  addBtn.className = 'add-pedido-btn';
-  addBtn.innerHTML = '<span class="plus">＋</span>Nuevo pedido pendiente';
-  addBtn.onclick = openPedidoModal;
+  const addBtn=document.createElement('div');
+  addBtn.className='add-pedido-btn';
+  addBtn.innerHTML='<span class="plus">＋</span>Nuevo pedido pendiente';
+  addBtn.onclick=openPedidoModal;
   grid.appendChild(addBtn);
 }
 
-function openPedidoModal() {
-  editingPedidoId = null;
-  document.getElementById('pedido-cliente-input').value = '';
-  document.getElementById('pedido-comanda-input').value = '';
-  document.getElementById('pedido-valor-input').value = '';
-  document.getElementById('modal-pedido-title').textContent = 'Nuevo pedido pendiente';
+function openPedidoModal(){
+  ['pedido-cliente-input','pedido-comanda-input','pedido-valor-input'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('modal-pedido').classList.add('open');
 }
 
-function savePedido() {
-  const cliente = document.getElementById('pedido-cliente-input').value.trim();
-  const comanda = document.getElementById('pedido-comanda-input').value.trim();
-  const valor = parseInt(document.getElementById('pedido-valor-input').value)||0;
-  if(!cliente){ alert('Ingresa el nombre del cliente'); return; }
-  pedidos.push({id:Date.now(),cliente,comanda,valor,pagado:false,fecha:new Date().toISOString()});
-  save(); renderPedidos(); closeModal('modal-pedido'); renderStats();
+async function savePedido(){
+  const cliente=document.getElementById('pedido-cliente-input').value.trim();
+  const comanda=document.getElementById('pedido-comanda-input').value.trim();
+  const valor=parseInt(document.getElementById('pedido-valor-input').value)||0;
+  if(!cliente){alert('Ingresa el nombre del cliente');return;}
+  pedidos.push({id:String(Date.now()),cliente,comanda,valor,pagado:false,fecha:new Date().toISOString()});
+  await save(); renderPedidos(); renderStats(); closeModal('modal-pedido');
 }
 
-function pagarPedido(id) {
-  const p = pedidos.find(x=>x.id===id);
-  if(!p) return;
-  p.pagado = true;
-  ventas.push({id:Date.now(),mesa:`Cliente: ${p.cliente}`,valor:p.valor,fecha:new Date().toISOString(),tipo:'pedido'});
-  save(); renderPedidos(); renderStats();
+async function pagarPedido(id){
+  const p=pedidos.find(x=>String(x.id)===String(id));
+  if(!p)return;
+  p.pagado=true;
+  ventas.push({id:String(Date.now()),mesa:'Pedido',cliente:p.cliente,valor:p.valor,fecha:new Date().toISOString(),tipo:'pedido',metodo:'efectivo'});
+  await save(); renderPedidos(); renderStats();
 }
 
-function eliminarPedido(id) {
-  if(!confirm('¿Eliminar este pedido?')) return;
-  pedidos = pedidos.filter(p=>p.id!==id);
-  save(); renderPedidos(); renderStats();
+async function eliminarPedido(id){
+  if(!confirm('¿Eliminar este pedido?'))return;
+  pedidos=pedidos.filter(p=>String(p.id)!==String(id));
+  await save(); renderPedidos(); renderStats();
 }
 
-// ========== REGISTRO ==========
-function setFilter(f, el) {
-  currentFilter = f;
+// ═══ REGISTRO ═══
+function setFilter(f,el){
+  currentFilter=f;
   document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderRegistro();
+  el.classList.add('active'); renderRegistro();
 }
 
-function filterVentas(f) {
-  const now = new Date();
-  return ventas.filter(v => {
-    const d = new Date(v.fecha);
-    if(f==='hoy') return v.fecha.startsWith(today());
-    if(f==='semana') {
-      const start = new Date(now); start.setDate(now.getDate()-now.getDay()); start.setHours(0,0,0,0);
-      return d >= start;
-    }
-    if(f==='mes') return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+function filterVentas(f){
+  const now=new Date();
+  return ventas.filter(v=>{
+    const d=new Date(v.fecha);
+    if(f==='hoy')return v.fecha.startsWith(today());
+    if(f==='semana'){const s=new Date(now);s.setDate(now.getDate()-now.getDay());s.setHours(0,0,0,0);return d>=s;}
+    if(f==='mes')return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
     return true;
   }).sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
 }
 
-function renderRegistro() {
-  const data = filterVentas(currentFilter);
-  const total = data.reduce((s,v)=>s+v.valor,0);
-  const container = document.getElementById('registro-table');
-  const mask = '••••••';
-  if(!data.length) {
-    container.innerHTML = `<div class="empty-state"><div class="big">📋</div>No hay ventas en este período</div>`;
-    return;
-  }
-  container.innerHTML = `
+function renderRegistro(){
+  const data=filterVentas(currentFilter);
+  const total=data.reduce((s,v)=>s+v.valor,0);
+  const totEf=data.filter(v=>(v.metodo||'efectivo')!=='transferencia').reduce((s,v)=>s+v.valor,0);
+  const totTr=data.filter(v=>v.metodo==='transferencia').reduce((s,v)=>s+v.valor,0);
+  const c=document.getElementById('registro-table');
+  const mk='••••••';
+  if(!data.length){c.innerHTML=`<div class="empty-state"><div class="big">📋</div>No hay ventas en este período</div>`;return;}
+  c.innerHTML=`
     <table>
-      <thead><tr>
-        <th>#</th><th>Fecha</th><th>Mesa / Cliente</th><th>Tipo</th><th>Valor</th>
-      </tr></thead>
+      <thead><tr><th>#</th><th>Fecha</th><th>Mesa</th><th>Cliente</th><th>Tipo</th><th>Método</th><th>Valor</th></tr></thead>
       <tbody>
-        ${data.map((v,i)=>`
-          <tr>
-            <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3)">${data.length-i}</td>
-            <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2)">${formatDate(v.fecha)}</td>
-            <td>${v.mesa}</td>
-            <td><span class="pill pagado">${v.tipo==='mesa'?'Mesa':'Pedido'}</span></td>
-            <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent2);font-weight:600">${saldosOcultos ? mask : formatCOP(v.valor)}</td>
-          </tr>
-        `).join('')}
-        <tr style="font-weight:700;background:var(--bg3)">
-          <td colspan="4" style="text-align:right;padding-right:16px;font-size:13px;color:var(--text2)">TOTAL</td>
-          <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:16px;font-weight:700">${saldosOcultos ? mask : formatCOP(total)}</td>
+        ${data.map((v,i)=>`<tr>
+          <td style="font-family:'IBM Plex Mono',monospace;color:var(--text3)">${data.length-i}</td>
+          <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text2)">${formatDate(v.fecha)}</td>
+          <td>Mesa ${v.mesa}</td>
+          <td style="color:var(--text2)">${v.cliente||'—'}</td>
+          <td><span class="pill pagado">${v.tipo==='mesa'?'Mesa':'Pedido'}</span></td>
+          <td><span class="pill ${(v.metodo||'efectivo')==='transferencia'?'transferencia':'efectivo'}">${(v.metodo||'efectivo')==='transferencia'?'📲 Transf.':'💵 Efectivo'}</span></td>
+          <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent2);font-weight:600">${saldosOcultos?mk:formatCOP(v.valor)}</td>
+        </tr>`).join('')}
+        <tr style="background:var(--bg3)">
+          <td colspan="4"></td>
+          <td colspan="2" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;line-height:1.8">
+            💵 Efectivo: ${saldosOcultos?mk:formatCOP(totEf)}<br>
+            📲 Transfer: ${saldosOcultos?mk:formatCOP(totTr)}
+          </td>
+          <td style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:16px;font-weight:700;vertical-align:middle">${saldosOcultos?mk:formatCOP(total)}</td>
         </tr>
       </tbody>
-    </table>
-  `;
+    </table>`;
 }
 
-// ========== CSV EXPORT ==========
-function exportCSV(periodo) {
-  const data = filterVentas(periodo);
-  const header = 'Numero,Fecha,Mesa_Cliente,Tipo,Valor_COP\n';
-  const rows = data.map((v,i)=>`${i+1},"${formatDate(v.fecha)}","${v.mesa}","${v.tipo==='mesa'?'Mesa':'Pedido'}",${v.valor}`).join('\n');
-  const csv = '\uFEFF' + header + rows;
-  const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const labels = {hoy:'hoy',semana:'semana',mes:'mes',todo:'todo'};
-  a.href = url; a.download = `ventas_${labels[periodo]}_${today()}.csv`;
-  a.click(); URL.revokeObjectURL(url);
+// ═══ CSV ═══
+function exportCSV(periodo){
+  const data=filterVentas(periodo);
+  const hdr='Numero,Fecha,Mesa,Cliente,Tipo,Metodo,Valor_COP\n';
+  const rows=data.map((v,i)=>`${i+1},"${formatDate(v.fecha)}","Mesa ${v.mesa}","${v.cliente||''}","${v.tipo==='mesa'?'Mesa':'Pedido'}","${v.metodo||'efectivo'}",${v.valor}`).join('\n');
+  const blob=new Blob(['\uFEFF'+hdr+rows],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=`ventas_${periodo}_${today()}.csv`; a.click();
 }
 
-// ========== TOGGLE SALDOS ==========
-let saldosOcultos = false;
-function toggleSaldos() {
-  saldosOcultos = !saldosOcultos;
-  const btn = document.getElementById('btn-toggle-saldos');
-  btn.innerHTML = saldosOcultos
-    ? '<span class="icon">👁</span> Mostrar saldos'
-    : '<span class="icon">👁</span> Ocultar saldos';
-  renderRegistro();
-  renderStats();
-  renderMesas();
+// ═══ TOGGLE SALDOS ═══
+function toggleSaldos(){
+  saldosOcultos=!saldosOcultos;
+  document.getElementById('btn-toggle-saldos').innerHTML=saldosOcultos?'<span>👁</span> Mostrar saldos':'<span>👁</span> Ocultar saldos';
+  renderRegistro(); renderStats(); renderMesas();
 }
 
-// ========== BORRAR REGISTROS ==========
-function openBorrarModal() {
-  document.getElementById('borrar-confirm-input').value = '';
-  document.getElementById('modal-borrar').classList.add('open');
-}
-
-async function confirmarBorrar() {
-  const val = document.getElementById('borrar-confirm-input').value.trim();
-  if(val !== 'BORRAR') {
-    document.getElementById('borrar-confirm-input').style.borderColor = 'var(--red)';
-    document.getElementById('borrar-confirm-input').placeholder = '¡Debes escribir BORRAR exactamente!';
-    setTimeout(()=>{
-      document.getElementById('borrar-confirm-input').style.borderColor = '';
-    }, 1500);
-    return;
+// ═══ BORRAR ═══
+function openBorrarModal(){document.getElementById('borrar-confirm-input').value='';document.getElementById('modal-borrar').classList.add('open');}
+async function confirmarBorrar(){
+  if(document.getElementById('borrar-confirm-input').value.trim()!=='BORRAR'){
+    const i=document.getElementById('borrar-confirm-input');
+    i.style.borderColor='var(--red)';i.placeholder='¡Escribe BORRAR exactamente!';
+    setTimeout(()=>{i.style.borderColor='';},1500);return;
   }
-  ventas = [];
-  await save();
-  closeModal('modal-borrar');
-  renderRegistro();
-  renderStats();
+  ventas=[];
+  await save(); closeModal('modal-borrar'); renderRegistro(); renderStats();
 }
 
-// ========== UTILS ==========
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+// ═══ UTILS ═══
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 
-// ========== INIT ==========
 loadData();
 </script>
 </body>
