@@ -79,9 +79,48 @@
   .mesa-total-value{font-size:18px;font-family:'IBM Plex Mono',monospace;font-weight:700;}
   .mesa-total-pendiente{font-size:12px;font-family:'IBM Plex Mono',monospace;color:#95c4a8;}
 
-  .subcuentas-list{margin-bottom:12px;}
-  .subcuenta-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  /* ══ NUEVA UI DE SUBCUENTAS ══ */
+  .sc-area{margin-bottom:8px;}
+
+  /* Valor único (modo sin subcuentas) */
+  .valor-unico-row{display:flex;align-items:flex-end;gap:10px;margin-bottom:8px;}
+  .valor-unico-row .form-group{flex:1;margin-bottom:0;}
+  .btn-add-sc{
+    flex:none;width:44px;height:44px;
+    border:2px dashed var(--border);background:var(--bg3);
+    border-radius:10px;color:var(--accent);font-size:22px;font-weight:700;
+    cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;
+    line-height:1;
+  }
+  .btn-add-sc:hover{border-color:var(--accent2);background:rgba(45,106,79,0.07);transform:scale(1.05);}
+
+  /* Lista de subcuentas */
+  .subcuentas-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+  .subcuenta-item{
+    background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+    padding:10px 13px;display:flex;align-items:center;gap:10px;
+    animation:slideUp 0.15s ease;
+  }
   .subcuenta-item.pagada-sc{opacity:0.55;border-left:3px solid var(--green);}
+
+  /* Fila de edición inline (subcuenta pendiente) */
+  .sc-edit-row{display:flex;align-items:center;gap:8px;flex:1;}
+  .sc-edit-nombre{
+    flex:1;min-width:0;
+    background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+    padding:7px 10px;font-size:13px;color:var(--text);
+    font-family:'Plus Jakarta Sans',sans-serif;outline:none;
+  }
+  .sc-edit-nombre:focus{border-color:var(--accent2);}
+  .sc-edit-valor{
+    width:110px;flex:none;
+    background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+    padding:7px 10px;font-size:13px;color:var(--text);
+    font-family:'IBM Plex Mono',monospace;outline:none;
+  }
+  .sc-edit-valor:focus{border-color:var(--accent2);}
+
+  /* Info readonly (subcuenta pagada) */
   .subcuenta-info{flex:1;}
   .subcuenta-nombre{font-weight:600;font-size:14px;color:var(--text);}
   .subcuenta-valor{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent2);margin-top:2px;}
@@ -92,12 +131,25 @@
   .sc-btn{padding:6px 11px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;}
   .sc-btn-pay{background:var(--green);color:white;} .sc-btn-pay:hover{filter:brightness(1.1);}
   .sc-btn-print{background:var(--bg3);color:var(--text2);border:1px solid var(--border);} .sc-btn-print:hover{color:var(--accent);border-color:var(--accent);}
-  .sc-btn-del{background:var(--bg3);color:var(--text3);border:1px solid var(--border);} .sc-btn-del:hover{color:var(--red);border-color:var(--red);}
+  .sc-btn-del{background:var(--bg3);color:var(--text3);border:1px solid var(--border);padding:6px 9px;} .sc-btn-del:hover{color:var(--red);border-color:var(--red);}
 
-  .add-subcuenta-form{background:var(--bg3);border:1px dashed var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
-  .form-row{display:flex;gap:10px;}
-  .form-row .form-group{flex:1;margin-bottom:0;}
-  .form-row-label{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+  /* Fila total dinámica (cuando hay subcuentas) */
+  .sc-total-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;margin-top:4px;margin-bottom:12px;
+  }
+  .sc-total-label{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;}
+  .sc-total-value{font-size:16px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--accent);}
+
+  /* Botón agregar más subcuentas (cuando ya hay al menos 1) */
+  .btn-add-more-sc{
+    width:100%;padding:9px;border:1.5px dashed var(--border);background:transparent;
+    border-radius:10px;color:var(--text3);font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;
+    justify-content:center;gap:6px;margin-bottom:12px;
+  }
+  .btn-add-more-sc:hover{border-color:var(--accent2);color:var(--accent);background:rgba(45,106,79,0.04);}
 
   /* MÉTODO PAGO */
   .metodo-selector{display:flex;gap:8px;margin-bottom:16px;}
@@ -153,28 +205,6 @@
 
   #db-loader{position:fixed;bottom:20px;right:20px;background:var(--accent3);color:#d8f3dc;padding:10px 18px;border-radius:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:opacity 0.3s;opacity:0;pointer-events:none;}
 
-  /* SLIDER SUBCUENTAS */
-  .sc-slider-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
-  .sc-slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-  .sc-slider-label{font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:0.5px;}
-  .sc-slider-count{font-size:20px;font-weight:700;color:var(--accent);font-family:'IBM Plex Mono',monospace;min-width:28px;text-align:right;}
-  .sc-slider-desc{font-size:11px;color:var(--text3);margin-top:2px;}
-  input[type=range].sc-slider{
-    -webkit-appearance:none; appearance:none;
-    width:100%; height:6px;
-    background:linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct,0%), var(--border) var(--pct,0%), var(--border) 100%);
-    border-radius:3px; outline:none; cursor:pointer;
-  }
-  input[type=range].sc-slider::-webkit-slider-thumb{
-    -webkit-appearance:none; width:20px; height:20px;
-    background:var(--accent); border-radius:50%;
-    box-shadow:0 2px 6px rgba(45,106,79,0.35);
-    transition:transform 0.15s;
-  }
-  input[type=range].sc-slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
-  .sc-slider-dots{display:flex;justify-content:space-between;padding:0 2px;margin-top:5px;}
-  .sc-slider-dots span{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
-
   /* BOTÓN VACIAR MESAS */
   .vaciar-btn{
     display:flex; align-items:center; gap:8px;
@@ -186,7 +216,6 @@
   }
   .vaciar-btn:hover{background:rgba(192,57,43,0.07);border-color:var(--red);}
 
-  /* MODAL VACIAR */
   .vaciar-confirm-box{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.2);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.6;}
 
   /* ══ FACTURA IMPRIMIBLE ══ */
@@ -257,7 +286,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">Pa Comer <span>POS v2.0</span></div>
+  <div class="nav-logo">Pa Comer <span>POS v2.1</span></div>
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="showSection('mesas',this)">🪑 Mesas</button>
     <button class="tab-btn" onclick="showSection('pedidos',this)">📋 Pedidos</button>
@@ -303,61 +332,14 @@
   </div>
 </main>
 
-<!-- ══ MODAL MESA (subcuentas) ══ -->
+<!-- ══ MODAL MESA ══ -->
 <div class="modal-overlay" id="modal-mesa">
   <div class="modal wide">
     <div class="modal-title" id="modal-mesa-title">Mesa #</div>
     <div class="modal-subtitle" id="modal-mesa-sub"></div>
 
-    <div class="mesa-total-bar" id="mesa-total-bar" style="display:none">
-      <div>
-        <div class="mesa-total-label">Total mesa</div>
-        <div class="mesa-total-pendiente" id="mesa-total-pendiente"></div>
-      </div>
-      <div class="mesa-total-value" id="mesa-total-value">$ 0</div>
-    </div>
-
-    <div class="subcuentas-list" id="subcuentas-list"></div>
-
-    <div class="add-subcuenta-form" id="add-sc-form" style="display:none">
-      <div class="form-row-label">➕ Nueva subcuenta</div>
-      <div class="form-row" style="margin-top:8px">
-        <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" id="sc-nombre" placeholder="Ej: Cliente 1">
-        </div>
-        <div class="form-group">
-          <label>Valor (COP)</label>
-          <input type="number" id="sc-valor" placeholder="0" min="0">
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:8px">
-        <button class="btn btn-primary btn-sm" onclick="agregarSubcuenta()">Agregar</button>
-        <button class="btn btn-ghost btn-sm" onclick="toggleFormSC(false)">Cancelar</button>
-      </div>
-    </div>
-
-    <div id="valor-unico-wrap">
-      <div class="form-group">
-        <label>Valor total (COP $)</label>
-        <input type="number" id="mesa-valor-input" placeholder="0" min="0">
-      </div>
-      <!-- Slider subcuentas -->
-      <div class="sc-slider-wrap" id="sc-slider-wrap">
-        <div class="sc-slider-header">
-          <div>
-            <div class="sc-slider-label">Subcuentas en esta mesa</div>
-            <div class="sc-slider-desc" id="sc-slider-desc">Sin subcuentas — una sola cuenta</div>
-          </div>
-          <div class="sc-slider-count" id="sc-slider-display">0</div>
-        </div>
-        <input type="range" class="sc-slider" id="sc-slider" min="0" max="10" value="0"
-               oninput="onSliderChange(this.value)">
-        <div class="sc-slider-dots">
-          <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
-        </div>
-      </div>
-    </div>
+    <!-- Área dinámica: valor único O subcuentas -->
+    <div id="sc-area"></div>
 
     <div class="modal-actions" id="modal-mesa-actions"></div>
   </div>
@@ -368,7 +350,7 @@
   <div class="modal">
     <div class="modal-title">Cobrar subcuenta</div>
     <div class="modal-subtitle" id="pago-sc-sub"></div>
-    <div class="form-row-label" style="margin-bottom:8px">Método de pago</div>
+    <div class="form-row-label" style="margin-bottom:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px">Método de pago</div>
     <div class="metodo-selector">
       <button class="metodo-btn active-efectivo" id="btn-efectivo" onclick="selectMetodo('efectivo')">💵 Efectivo</button>
       <button class="metodo-btn" id="btn-transferencia" onclick="selectMetodo('transferencia')">📲 Transferencia</button>
@@ -386,7 +368,7 @@
   <div class="modal">
     <div class="modal-title" id="pago-simple-title">Cobrar mesa</div>
     <div class="modal-subtitle" id="pago-simple-sub"></div>
-    <div class="form-row-label" style="margin-bottom:8px">Método de pago</div>
+    <div class="form-row-label" style="margin-bottom:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px">Método de pago</div>
     <div class="metodo-selector">
       <button class="metodo-btn active-efectivo" id="btn-ef-simple" onclick="selectMetodoSimple('efectivo')">💵 Efectivo</button>
       <button class="metodo-btn" id="btn-tr-simple" onclick="selectMetodoSimple('transferencia')">📲 Transferencia</button>
@@ -466,7 +448,6 @@ function hideLoader(d=900){_lt=setTimeout(()=>{document.getElementById('db-loade
 
 // ═══ SHEETS API ═══
 function safeJSON(s,fb){try{return JSON.parse(s);}catch(e){return fb;}}
-
 async function sheetGet(t){return fetch(`${SCRIPT_URL}?action=get&table=${t}`).then(r=>r.json());}
 async function sheetSet(t,data){
   return fetch(`${SCRIPT_URL}?action=set&table=${t}&data=${encodeURIComponent(JSON.stringify(data))}`).then(r=>r.json());
@@ -489,6 +470,12 @@ async function loadData(){
 
 async function save(){
   showLoader('💾 Guardando...');
+  // Sincronizar valor de la mesa con las subcuentas antes de guardar
+  mesas.forEach(m=>{
+    if(m.subcuentas&&m.subcuentas.length>0){
+      m.valor=m.subcuentas.reduce((s,c)=>s+c.valor,0);
+    }
+  });
   const mD=[['id','status','valor','subcuentas'],...mesas.map(m=>[m.id,m.status,m.valor,JSON.stringify(m.subcuentas||[])])];
   const vD=[['id','mesa','cliente','valor','fecha','tipo','metodo'],...ventas.map(v=>[v.id,v.mesa,v.cliente||'',v.valor,v.fecha,v.tipo,v.metodo||'efectivo'])];
   const pD=[['id','cliente','comanda','valor','pagado','fecha'],...pedidos.map(p=>[p.id,p.cliente,p.comanda,p.valor,p.pagado,p.fecha])];
@@ -501,7 +488,7 @@ async function save(){
 }
 
 // ═══ UTILS ═══
-function formatCOP(n){'$';return '$ '+Math.round(n||0).toLocaleString('es-CO');}
+function formatCOP(n){return '$ '+Math.round(n||0).toLocaleString('es-CO');}
 function today(){return new Date().toISOString().split('T')[0];}
 function formatDate(iso){return new Date(iso).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}
 function formatDateLong(iso){return new Date(iso).toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});}
@@ -560,102 +547,217 @@ function renderStats(){
   `;
 }
 
-// ═══ MODAL MESA ═══
+// ═══════════════════════════════════════════
+// ═══ MODAL MESA — nueva lógica unificada ═══
+// ═══════════════════════════════════════════
+
 function openMesaModal(mesa){
   currentMesa=mesa;
   document.getElementById('modal-mesa-title').textContent=`Mesa ${mesa.id}`;
-  // Reset slider
-  const sl=document.getElementById('sc-slider');
-  if(sl){ sl.value=0; onSliderChange(0); }
-  renderModalSC();
+  renderSCArea();
   buildMesaActions();
   document.getElementById('modal-mesa').classList.add('open');
 }
 
-function renderModalSC(){
-  const m=currentMesa, sc=m.subcuentas||[];
-  const total=sc.reduce((s,c)=>s+c.valor,0);
-  const pend=sc.filter(c=>!c.pagado).reduce((s,c)=>s+c.valor,0);
-  const sub=document.getElementById('modal-mesa-sub');
+/**
+ * Renderiza el área central del modal según el estado de la mesa.
+ *
+ * MODOS:
+ * A) Mesa libre SIN subcuentas → input valor único + botón [+]
+ * B) Mesa ocupada SIN subcuentas → input valor único editable + botón [+] + [Cobrar]
+ * C) Mesa con subcuentas → lista editable + total calculado + [+ Agregar cuenta]
+ */
+function renderSCArea(){
+  const m = currentMesa;
+  const sc = m.subcuentas || [];
+  const container = document.getElementById('sc-area');
+  container.innerHTML = '';
 
-  // Total bar
-  const bar=document.getElementById('mesa-total-bar');
-  if(sc.length>0){
-    bar.style.display='flex';
-    document.getElementById('mesa-total-value').textContent=formatCOP(total);
-    document.getElementById('mesa-total-pendiente').textContent=`Pendiente: ${formatCOP(pend)}`;
-    sub.textContent=`${sc.length} subcuenta(s) · ${sc.filter(c=>!c.pagado).length} por cobrar`;
-  } else {
-    bar.style.display='none';
-    sub.textContent=m.status==='libre'?'Mesa disponible — ingresa el valor del consumo':`Valor actual: ${formatCOP(m.valor)}`;
-  }
+  // Actualizar subtítulo
+  const sub = document.getElementById('modal-mesa-sub');
 
-  // Lista
-  const list=document.getElementById('subcuentas-list');
-  list.innerHTML='';
-  sc.forEach((c,idx)=>{
-    const item=document.createElement('div');
-    item.className=`subcuenta-item${c.pagado?' pagada-sc':''}`;
-    item.innerHTML=`
-      <div class="subcuenta-info">
-        <div class="subcuenta-nombre">${c.nombre}</div>
-        <div class="subcuenta-valor">${formatCOP(c.valor)}</div>
-        ${c.pagado?`<div class="subcuenta-metodo ${c.metodo}">${c.metodo==='transferencia'?'📲 Transferencia':'💵 Efectivo'}</div>`:''}
-      </div>
-      <div class="subcuenta-actions">
-        ${!c.pagado?`<button class="sc-btn sc-btn-pay" onclick="abrirPagoSC(${idx})">Cobrar</button>`
-                   :`<span style="font-size:11px;color:var(--green);font-weight:600;white-space:nowrap">✓ Pagado</span>`}
-        ${c.pagado?`<button class="sc-btn sc-btn-print" onclick="imprimirFacturaSC(${idx})">🖨</button>`:''}
-        ${!c.pagado?`<button class="sc-btn sc-btn-del" onclick="eliminarSC(${idx})">✕</button>`:''}
+  if(sc.length === 0){
+    // ── MODO: sin subcuentas ──
+    sub.textContent = m.status==='libre'
+      ? 'Mesa disponible — ingresa el valor del consumo'
+      : `Valor actual: ${formatCOP(m.valor)}`;
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <div class="valor-unico-row">
+        <div class="form-group">
+          <label>Valor total (COP $)</label>
+          <input type="number" id="mesa-valor-input" placeholder="0" min="0" value="${m.valor||''}">
+        </div>
+        <button class="btn-add-sc" title="Agregar subcuentas" onclick="agregarPrimeraSubcuenta()">+</button>
       </div>
     `;
-    list.appendChild(item);
-  });
+    container.appendChild(wrap);
 
-  // Valor único
-  const sliderWrap=document.getElementById('sc-slider-wrap');
-  document.getElementById('valor-unico-wrap').style.display=sc.length>0?'none':'block';
-  if(sliderWrap) sliderWrap.style.display=(sc.length>0||m.status==='ocupada')?'none':'block';
-  if(sc.length===0 && m.status==='libre') document.getElementById('mesa-valor-input').value=m.valor||'';
-  if(sc.length===0 && m.status==='ocupada') document.getElementById('mesa-valor-input').value=m.valor||'';
+  } else {
+    // ── MODO: con subcuentas ──
+    const total = sc.reduce((s,c)=>s+c.valor,0);
+    const pend  = sc.filter(c=>!c.pagado).length;
+    sub.textContent = `${sc.length} subcuenta(s) · ${pend} por cobrar · Total: ${formatCOP(total)}`;
+
+    // Lista de subcuentas
+    const list = document.createElement('div');
+    list.className = 'subcuentas-list';
+
+    sc.forEach((c,idx)=>{
+      const item = document.createElement('div');
+      item.className = `subcuenta-item${c.pagado?' pagada-sc':''}`;
+
+      if(c.pagado){
+        // Readonly — ya cobrada
+        item.innerHTML=`
+          <div class="subcuenta-info">
+            <div class="subcuenta-nombre">${c.nombre}</div>
+            <div class="subcuenta-valor">${formatCOP(c.valor)}</div>
+            <div class="subcuenta-metodo ${c.metodo}">${c.metodo==='transferencia'?'📲 Transferencia':'💵 Efectivo'}</div>
+          </div>
+          <div class="subcuenta-actions">
+            <span style="font-size:11px;color:var(--green);font-weight:600;white-space:nowrap">✓ Pagado</span>
+            <button class="sc-btn sc-btn-print" onclick="imprimirFacturaSC(${idx})">🖨</button>
+          </div>
+        `;
+      } else {
+        // Editable inline
+        item.innerHTML=`
+          <div class="sc-edit-row">
+            <input class="sc-edit-nombre" type="text" value="${c.nombre}" placeholder="Nombre"
+              onchange="currentMesa.subcuentas[${idx}].nombre=this.value">
+            <input class="sc-edit-valor" type="number" value="${c.valor||''}" placeholder="$ 0" min="0"
+              oninput="currentMesa.subcuentas[${idx}].valor=parseInt(this.value)||0;actualizarTotalSC()">
+          </div>
+          <div class="subcuenta-actions">
+            <button class="sc-btn sc-btn-pay" onclick="abrirPagoSC(${idx})">Cobrar</button>
+            <button class="sc-btn sc-btn-del" onclick="eliminarSC(${idx})">✕</button>
+          </div>
+        `;
+      }
+      list.appendChild(item);
+    });
+    container.appendChild(list);
+
+    // Fila total
+    const totalRow = document.createElement('div');
+    totalRow.className = 'sc-total-row';
+    totalRow.id = 'sc-total-row';
+    totalRow.innerHTML=`
+      <span class="sc-total-label">Total mesa</span>
+      <span class="sc-total-value" id="sc-total-display">${formatCOP(total)}</span>
+    `;
+    container.appendChild(totalRow);
+
+    // Botón agregar más
+    const addMore = document.createElement('button');
+    addMore.className = 'btn-add-more-sc';
+    addMore.innerHTML = '＋ Agregar cuenta';
+    addMore.onclick = agregarSubcuentaExtra;
+    container.appendChild(addMore);
+  }
+}
+
+/**
+ * Actualiza el total mostrado cuando se editan valores inline
+ */
+function actualizarTotalSC(){
+  const sc = currentMesa.subcuentas || [];
+  const total = sc.reduce((s,c)=>s+c.valor,0);
+  const el = document.getElementById('sc-total-display');
+  if(el) el.textContent = formatCOP(total);
+  // Actualizar subtítulo
+  const pend = sc.filter(c=>!c.pagado).length;
+  document.getElementById('modal-mesa-sub').textContent =
+    `${sc.length} subcuenta(s) · ${pend} por cobrar · Total: ${formatCOP(total)}`;
+}
+
+/**
+ * Se llama cuando se presiona el [+] en modo sin subcuentas.
+ * Toma el valor del input como primera subcuenta y agrega una segunda vacía.
+ */
+function agregarPrimeraSubcuenta(){
+  const valInput = parseInt(document.getElementById('mesa-valor-input').value)||0;
+  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
+
+  // Primera subcuenta con el valor que había en el input
+  currentMesa.subcuentas.push({nombre:'Cliente 1', valor:valInput, pagado:false, metodo:null, fechaPago:null});
+  // Segunda subcuenta vacía lista para llenar
+  currentMesa.subcuentas.push({nombre:'Cliente 2', valor:0, pagado:false, metodo:null, fechaPago:null});
+  currentMesa.valor = valInput;
+  currentMesa.status = 'ocupada';
+
+  renderSCArea();
+  buildMesaActions();
+  // Foco en el valor de la segunda subcuenta
+  const inputs = document.querySelectorAll('.sc-edit-valor');
+  if(inputs.length>1) inputs[1].focus();
+}
+
+/**
+ * Agrega una subcuenta extra (desde el botón "＋ Agregar cuenta")
+ */
+function agregarSubcuentaExtra(){
+  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
+  const n = currentMesa.subcuentas.length + 1;
+  currentMesa.subcuentas.push({nombre:`Cliente ${n}`, valor:0, pagado:false, metodo:null, fechaPago:null});
+  renderSCArea();
+  buildMesaActions();
+  // Foco en el último input de valor
+  const inputs = document.querySelectorAll('.sc-edit-valor');
+  if(inputs.length) inputs[inputs.length-1].focus();
+}
+
+function eliminarSC(idx){
+  currentMesa.subcuentas.splice(idx,1);
+  // Si no quedan subcuentas, volver al modo valor único
+  if(currentMesa.subcuentas.length===0){
+    currentMesa.valor=0;
+  }
+  renderSCArea();
+  buildMesaActions();
+  save();
 }
 
 function buildMesaActions(){
-  const m=currentMesa, sc=m.subcuentas||[];
-  const actions=document.getElementById('modal-mesa-actions');
+  const m = currentMesa;
+  const sc = m.subcuentas || [];
+  const actions = document.getElementById('modal-mesa-actions');
   actions.innerHTML='';
 
-  const cerrar=document.createElement('button');
+  // Cerrar siempre
+  const cerrar = document.createElement('button');
   cerrar.className='btn btn-ghost'; cerrar.textContent='Cerrar';
   cerrar.onclick=()=>closeModal('modal-mesa');
   actions.appendChild(cerrar);
 
   if(m.status==='libre'){
-    const b=document.createElement('button');
-    b.className='btn btn-primary'; b.textContent='Ocupar Mesa';
-    b.onclick=async()=>{
-      m.valor=parseInt(document.getElementById('mesa-valor-input').value)||0;
-      m.status='ocupada'; m.subcuentas=[];
-      // Aplicar slider si > 0
-      const sliderVal=parseInt(document.getElementById('sc-slider').value)||0;
-      for(let i=0;i<sliderVal;i++){
-        m.subcuentas.push({nombre:`Cliente ${i+1}`,valor:0,pagado:false,metodo:null,fechaPago:null});
-      }
-      document.getElementById('sc-slider').value=0; onSliderChange(0);
-      await save(); renderMesas();
-      // Si hay subcuentas abrir modal para llenar valores
-      if(m.subcuentas.length>0){ renderModalSC(); buildMesaActions(); }
-      else { closeModal('modal-mesa'); }
-    };
-    actions.appendChild(b);
-  } else {
-    // Botón añadir subcuenta
-    const sc_btn=document.createElement('button');
-    sc_btn.className='btn btn-ghost btn-sm'; sc_btn.textContent='+ Subcuenta';
-    sc_btn.onclick=()=>toggleFormSC(true);
-    actions.appendChild(sc_btn);
-
+    // Mesa libre sin subcuentas: botón Ocupar
     if(sc.length===0){
+      const b=document.createElement('button');
+      b.className='btn btn-primary'; b.textContent='Ocupar Mesa';
+      b.onclick=async()=>{
+        m.valor=parseInt(document.getElementById('mesa-valor-input').value)||0;
+        m.status='ocupada';
+        await save(); renderMesas(); closeModal('modal-mesa');
+      };
+      actions.appendChild(b);
+    } else {
+      // Mesa libre pero con subcuentas (recién creadas)
+      const b=document.createElement('button');
+      b.className='btn btn-primary'; b.textContent='Guardar y Ocupar';
+      b.onclick=async()=>{
+        m.status='ocupada';
+        m.valor=sc.reduce((s,c)=>s+c.valor,0);
+        await save(); renderMesas(); closeModal('modal-mesa');
+      };
+      actions.appendChild(b);
+    }
+  } else {
+    // Mesa ocupada
+    if(sc.length===0){
+      // Sin subcuentas: actualizar + cobrar
       const upd=document.createElement('button');
       upd.className='btn btn-ghost btn-sm'; upd.textContent='Actualizar';
       upd.onclick=async()=>{
@@ -668,8 +770,10 @@ function buildMesaActions(){
       pagar.className='btn btn-success'; pagar.textContent='✓ Cobrar mesa';
       pagar.onclick=()=>abrirPagoSimple();
       actions.appendChild(pagar);
+
     } else {
-      const todasPagas=sc.length>0&&sc.every(c=>c.pagado);
+      // Con subcuentas
+      const todasPagas = sc.length>0 && sc.every(c=>c.pagado);
       if(todasPagas){
         const lib=document.createElement('button');
         lib.className='btn btn-primary'; lib.textContent='Liberar Mesa';
@@ -678,31 +782,20 @@ function buildMesaActions(){
           await save(); renderMesas(); closeModal('modal-mesa');
         };
         actions.appendChild(lib);
+      } else {
+        // Hay pendientes: guardar cambios inline
+        const guardar=document.createElement('button');
+        guardar.className='btn btn-ghost btn-sm'; guardar.textContent='💾 Guardar cambios';
+        guardar.onclick=async()=>{
+          m.valor=sc.reduce((s,c)=>s+c.valor,0);
+          await save(); renderMesas();
+          // Actualizar subtítulo
+          actualizarTotalSC();
+        };
+        actions.appendChild(guardar);
       }
     }
   }
-}
-
-function toggleFormSC(show){
-  document.getElementById('add-sc-form').style.display=show?'block':'none';
-  if(show) document.getElementById('sc-nombre').focus();
-}
-
-function agregarSubcuenta(){
-  const nombre=document.getElementById('sc-nombre').value.trim()||`Cliente ${(currentMesa.subcuentas||[]).length+1}`;
-  const valor=parseInt(document.getElementById('sc-valor').value)||0;
-  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
-  currentMesa.subcuentas.push({nombre,valor,pagado:false,metodo:null,fechaPago:null});
-  currentMesa.status='ocupada';
-  document.getElementById('sc-nombre').value='';
-  document.getElementById('sc-valor').value='';
-  toggleFormSC(false);
-  renderModalSC(); buildMesaActions(); save();
-}
-
-function eliminarSC(idx){
-  currentMesa.subcuentas.splice(idx,1);
-  renderModalSC(); buildMesaActions(); save();
 }
 
 // ═══ PAGO SUBCUENTA ═══
@@ -726,10 +819,10 @@ async function confirmarPagoSC(imprimir){
   sc.pagado=true; sc.metodo=metodoSC; sc.fechaPago=new Date().toISOString();
   ventas.push({id:String(Date.now()),mesa:String(currentMesa.id),cliente:sc.nombre,valor:sc.valor,fecha:sc.fechaPago,tipo:'mesa',metodo:metodoSC});
   const todasPagas=currentMesa.subcuentas.every(c=>c.pagado);
-  if(todasPagas){currentMesa.status='libre';}
+  if(todasPagas){ currentMesa.status='libre'; }
   await save();
   closeModal('modal-pago-sc');
-  renderModalSC(); buildMesaActions(); renderMesas();
+  renderSCArea(); buildMesaActions(); renderMesas();
   if(imprimir) imprimirFacturaSC(currentSCIdx);
   if(todasPagas) closeModal('modal-mesa');
 }
@@ -905,33 +998,6 @@ function exportCSV(periodo){
   a.href=URL.createObjectURL(blob); a.download=`ventas_${periodo}_${today()}.csv`; a.click();
 }
 
-// ═══ SLIDER SUBCUENTAS ═══
-function onSliderChange(val){
-  val=parseInt(val);
-  const pct=((val/10)*100).toFixed(1)+'%';
-  document.getElementById('sc-slider').style.setProperty('--pct',pct);
-  document.getElementById('sc-slider-display').textContent=val;
-  const desc=val===0?'Sin subcuentas — una sola cuenta'
-            :val===1?'1 cliente — una subcuenta'
-            :`${val} clientes — ${val} subcuentas`;
-  document.getElementById('sc-slider-desc').textContent=desc;
-}
-
-function applySlider(){
-  const val=parseInt(document.getElementById('sc-slider').value);
-  if(val===0) return; // sin subcuentas, flujo normal
-  if(!currentMesa.subcuentas) currentMesa.subcuentas=[];
-  // Agregar las que faltan
-  const existing=currentMesa.subcuentas.length;
-  for(let i=existing;i<val;i++){
-    currentMesa.subcuentas.push({nombre:`Cliente ${i+1}`,valor:0,pagado:false,metodo:null,fechaPago:null});
-  }
-  currentMesa.status='ocupada';
-  document.getElementById('sc-slider').value=0;
-  onSliderChange(0);
-  renderModalSC(); buildMesaActions();
-}
-
 // ═══ VACIAR MESAS ═══
 function openVaciarModal(){
   document.getElementById('vaciar-confirm-input').value='';
@@ -950,6 +1016,7 @@ async function confirmarVaciar(){
   await save();
   closeModal('modal-vaciar'); renderMesas();
 }
+
 function toggleSaldos(){
   saldosOcultos=!saldosOcultos;
   document.getElementById('btn-toggle-saldos').innerHTML=saldosOcultos?'<span>👁</span> Mostrar saldos':'<span>👁</span> Ocultar saldos';
